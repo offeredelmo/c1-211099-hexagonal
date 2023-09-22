@@ -1,0 +1,19 @@
+# Archivos de configuración de IDE/Editor
+.idea/
+.vscode/
+
+# Dependencias
+node_modules
+
+# Directorio de salida
+dist/
+
+# Archivos de log
+npm-debug.log
+yarn-error.log
+
+# Archivos de entorno
+.env
+
+# Directorios de caché
+.cache/
