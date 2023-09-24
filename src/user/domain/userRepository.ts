@@ -12,6 +12,8 @@ export interface IUsuarioRepository {
         status: boolean
     ): Promise<User | null | void>;
 
+    loginUser(email:string, password:string):Promise<string | null>
+
     listAllUsers(): Promise<User[] | null> // no necesita validacion
 
     listAllUserIactive(): Promise<User[] | User | null> // no necesita validacion

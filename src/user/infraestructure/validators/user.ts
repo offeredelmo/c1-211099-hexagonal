@@ -100,3 +100,13 @@ export const validationUpdatePassword = [
     .notEmpty().withMessage('password is empty'),
     validateResult
 ]
+
+export const validationLogin = [
+    check('email')
+    .exists().withMessage('email is required.').bail()
+    .notEmpty().withMessage('email is empty'),
+    check('password')
+    .exists().withMessage('password is required.').bail()
+    .notEmpty().withMessage('password is empty'),
+    validateResult
+]

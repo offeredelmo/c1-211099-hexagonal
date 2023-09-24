@@ -27,6 +27,9 @@ import { DeleteUserController } from "./controllers/deleteUserController";
 import { ActivateUserUseCase } from "../application/activeUser.UseCase";
 import { ActivateUserController } from "./controllers/activateUser.Controller";
 
+import { LoginUserController } from "./controllers/loginUserController";
+import { LoginUserUseCase } from "../application/loginUserUseCase";
+
 
 
 export const mysqlUserRepository = new MysqlUserRepository()
@@ -56,7 +59,10 @@ export const updatePasswordController = new UpdatePasswordController(updatePassw
 export const deleteUserUseCase = new DeleteUserUseCase(mysqlUserRepository)
 export const deleteUserController = new DeleteUserController(deleteUserUseCase)
 
-
 export const activateUseCase = new ActivateUserUseCase(mysqlUserRepository)
 export const activateUserController = new ActivateUserController(activateUseCase)
+
+export const loginUserUseCase = new LoginUserUseCase(mysqlUserRepository)
+export const loginUserController = new LoginUserController(loginUserUseCase)
+
 
