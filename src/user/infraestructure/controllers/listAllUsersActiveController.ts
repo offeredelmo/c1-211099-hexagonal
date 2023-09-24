@@ -2,7 +2,6 @@ import { Request, Response } from "express";
 import { ListAllUserActiveUseCase } from "../../application/listAllUserInactiveUseCase";
 
 
-
 export class ListAllUsersActiveController {
     constructor(readonly listAllUserActiveUseCase : ListAllUserActiveUseCase) {}
     async run(req:Request, res:Response) {

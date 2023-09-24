@@ -13,8 +13,6 @@ export class GetUserByFilterController {
                 phone_number,
                 email,
             } = req.query
-
-            console.log('controller', name )
             let getUserByFilter = await this.getUserByFilterUseCase.run(filter as string, email as string, name as string, phone_number as string)
 
             if(getUserByFilter){

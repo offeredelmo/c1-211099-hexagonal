@@ -12,6 +12,21 @@ import { ListAllUsersActiveController } from "./controllers/listAllUsersActiveCo
 import { GetUserByFilterUseCase } from "../application/getUserByFilterUseCase";
 import { GetUserByFilterController } from "./controllers/getUserByFilterController";
 
+import { GetUserByIdUseCase } from "../application/getUserByIdUseCase";
+import { GetUserByIdController } from "./controllers/getUserByIdController";
+
+import { UpdateUserByIdUseCase } from "../application/updateUserByIdUseCase";
+import { UpdateUserByIdController } from "./controllers/updateUseByIdController";
+
+import { UpdatePasswordUserUsecase } from "../application/updatePasswordUserUseCase";
+import { UpdatePasswordController } from "./controllers/updatePasswordUserController";
+
+import { DeleteUserUseCase } from "../application/deleteUserUseCase";
+import { DeleteUserController } from "./controllers/deleteUserController";
+
+import { ActivateUserUseCase } from "../application/activeUser.UseCase";
+import { ActivateUserController } from "./controllers/activateUser.Controller";
+
 
 
 export const mysqlUserRepository = new MysqlUserRepository()
@@ -28,4 +43,20 @@ export const listAllUserActiveController = new ListAllUsersActiveController(list
 export const getUserByFilterUseCase= new GetUserByFilterUseCase(mysqlUserRepository)
 export const getUserByFilterController = new GetUserByFilterController(getUserByFilterUseCase)
 
+export const getUserByIdUseCase = new GetUserByIdUseCase(mysqlUserRepository)
+export const getUserByIdController = new GetUserByIdController(getUserByIdUseCase)
+
+
+export const updateUserByIdUseCase = new UpdateUserByIdUseCase(mysqlUserRepository)
+export const updateUserByIdController = new UpdateUserByIdController(updateUserByIdUseCase)
+
+export const updatePasswordUserUsecase = new UpdatePasswordUserUsecase(mysqlUserRepository)
+export const updatePasswordController = new UpdatePasswordController(updatePasswordUserUsecase)
+
+export const deleteUserUseCase = new DeleteUserUseCase(mysqlUserRepository)
+export const deleteUserController = new DeleteUserController(deleteUserUseCase)
+
+
+export const activateUseCase = new ActivateUserUseCase(mysqlUserRepository)
+export const activateUserController = new ActivateUserController(activateUseCase)
 
