@@ -1,12 +1,15 @@
+
+
 export class User {
     constructor(
-    id: string,
-    name: string,
-    last_name: string, 
-    email: string,
-    password: string,
-    loan_status: boolean,
-
+    public uuid: string,
+    public name: string,
+    public last_name: string, 
+    public phone_number: string,
+    public email: string,
+    public password: string,
+    public loan_status: boolean,
+    public status: boolean
     ){}
      
 
