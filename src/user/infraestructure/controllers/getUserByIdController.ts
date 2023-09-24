@@ -19,8 +19,17 @@ export class GetUserByIdController {
                         user: getUserByuuid
                     }
                 })
+            }else{
+                return res.status(404).send({
+                    status: "error",
+                    message: "User not found."
+                });
             }
         } catch (error) {   
+            return res.status(500).send({
+                status: "error",
+                message: "An error occurred while get the user."
+            });   
         }
     }
 }

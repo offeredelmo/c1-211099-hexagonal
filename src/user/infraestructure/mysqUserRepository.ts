@@ -76,12 +76,11 @@ export class MysqlUserRepository implements IUsuarioRepository {
                 default:
                     throw new Error('Invalid filter type');
             }
-
+          
             const [rows]: any = await query(sql, [value]);
-            if (!rows || rows.length === 0) return null;
-
+            if (!rows || rows.affectedRows === 0) return null;
             return rows.map((row: User) => new User(row.uuid, row.name, row.last_name, row.phone_number, row.email, row.password, row.loan_status, row.status));
-
+            
         } catch (error) {
             console.error(error);
             return null;
@@ -118,15 +117,20 @@ export class MysqlUserRepository implements IUsuarioRepository {
 
         const sqlParts = keys.map(key => `${key} = ?`);
         const sql = `UPDATE users SET ${sqlParts.join(', ')} WHERE uuid = ?`;
-
+        
         try {
             const values = keys.map(key => updates[key]);
             values.push(uuid); // Añade el UUID al final del array de valores.
             await query(sql, values); // Ejecuta la consulta SQL.
-
+            console.log('Antes de la consulta SELECT');
             const [updatedRows]: any = await query('SELECT * FROM users WHERE uuid = ?', [uuid]);
-            if (updatedRows.length === 0) return null;
+            if (!updatedRows || updatedRows.length === 0) {
+                throw new Error('No user found with the provided UUID.');
+            }
+            
 
+
+          
             const updatedUser = new User(
                 updatedRows[0].uuid,
                 updatedRows[0].name,
@@ -198,12 +202,10 @@ export class MysqlUserRepository implements IUsuarioRepository {
            
             const sql = 'UPDATE users SET status = true WHERE uuid = ?';
             const [resultSet]: any = await query(sql, [uuid]);
-            console.log(resultSet.affectedRows);
 
             if (!resultSet || resultSet.affectedRows === 0) {
                 return null;
-            }
-                    
+            }   
             return 'User activated successfully.';
         } catch (error) {
             console.error('Error activating user:', error);

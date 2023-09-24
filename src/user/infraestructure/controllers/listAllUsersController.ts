@@ -15,9 +15,17 @@ export class ListAllUserController {
                        listAllUser
                     }
                 })
+            }else{
+                return res.status(200).send({
+                    status: "ok",
+                    message: "Users not found"
+                });
             }
         } catch (error) {
-            
+            return res.status(500).send({
+                status: "error",
+                message: "An error occurred while list the user."
+            });
         }
 
     }

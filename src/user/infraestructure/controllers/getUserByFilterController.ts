@@ -22,8 +22,18 @@ export class GetUserByFilterController {
                         getUserByFilter
                     }
                 })
+            } else{
+                return res.status(404).send({
+                    status: "error",
+                    message: "User not found."
+                });
             }
-        } catch (error) {   
+
+        } catch (error) {
+            return res.status(500).send({
+                status: "error",
+                message: "An error occurred while list the user."
+            });   
         }
     }
 }

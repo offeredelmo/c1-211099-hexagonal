@@ -22,7 +22,17 @@ export class DeleteUserController {
                     }
                 })
             }
+            else{
+                return res.status(404).send({
+                    status: "error",
+                    message: "User not found or not delete."
+                });
+            }
         } catch (error) {   
+            return res.status(500).send({
+                status: "error",
+                message: "An error occurred while delete the user."
+            });
         }
     }
 }

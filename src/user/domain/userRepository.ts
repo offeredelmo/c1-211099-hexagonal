@@ -1,7 +1,7 @@
 import { User } from "./user";
 
 export interface IUsuarioRepository {
-    registerUser(
+    registerUser( //ya se valida
         uuid: string,
         name: string,
         last_name: string,
@@ -12,18 +12,18 @@ export interface IUsuarioRepository {
         status: boolean
     ): Promise<User | null | void>;
 
-    listAllUsers(): Promise<User[] | null>
+    listAllUsers(): Promise<User[] | null> // no necesita validacion
 
-    listAllUserIactive(): Promise<User[] | User | null>
+    listAllUserIactive(): Promise<User[] | User | null> // no necesita validacion
 
-    getUserByFilter(
+    getUserByFilter( // ya se valida si que solo pueda seleccionar user, email, phone number 
         filter: string,
         email?: string,
         name?: string,
         phone_number?: string
     ): Promise<User | User[] | null>
 
-    getUserById(uuid: string): Promise<User | null>
+    getUserById(uuid: string): Promise<User | null> //ya se valida
 
     updateUserById(
         uuid: string,
@@ -33,11 +33,11 @@ export interface IUsuarioRepository {
         email?: string,
     ): Promise<User | null>
 
-    updatePassword(uuid: string, password: string): Promise<User | null>
+    updatePassword(uuid: string, password: string): Promise<User | null> //ya se valida
 
-    deleteUserById(uuid: String): Promise<string | null>
-    
-    activateUser(uuid: string): Promise<string | null>
+    deleteUserById(uuid: String): Promise<string | null> //ya se valida
+
+    activateUser(uuid: string): Promise<string | null> //ya se valida
 
 }
 

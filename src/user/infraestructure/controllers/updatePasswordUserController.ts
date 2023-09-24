@@ -23,8 +23,17 @@ export class UpdatePasswordController {
                         update_user: updatePasswor
                     }
                 })
+            }else{
+                return res.status(404).send({
+                    status: "error",
+                    message: "User not found or not updated."
+                });
             }
-        } catch (error) {   
+        } catch (error) {
+            return res.status(500).send({
+                status: "error",
+                message: "An error occurred while update password."
+            });   
         }
     }
 }
