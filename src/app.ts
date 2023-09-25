@@ -19,9 +19,18 @@ admin.initializeApp({
 
 const app = express();
 const signale = new Signale();
+
+
 app.use(fileUpload());
+
 app.use(cors());
+
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+
+
+
 // app.use('/user', userRoutes);
 
 app.use('/book',bookRoutes)

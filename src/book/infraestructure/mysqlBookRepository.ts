@@ -4,7 +4,8 @@ import { IBookRepositorio } from "../domain/bookRepository";
 
 
 export class MysqlBookRepository implements IBookRepositorio {
-   
+
+
     async addBook(id: string, title: string, author: string, description: string, invoice: string, unique_code: string, img_url: string, loan_status: boolean): Promise<Book | null> {
         try {
             const sql = `
@@ -13,16 +14,16 @@ export class MysqlBookRepository implements IBookRepositorio {
             `;
             const values = [id, title, author, description, invoice, unique_code, img_url, loan_status];
             // Devuelve el libro recién añadido
-            const newBook:Book = new Book(id, title, author, description, invoice, unique_code, img_url, loan_status)
+            const newBook: Book = new Book(id, title, author, description, invoice, unique_code, img_url, loan_status)
             return newBook
-    
+
         } catch (error) {
             console.error("Error adding book:", error);
             return null;
         }
     }
-    
-    
+
+
     async listAllBooks(): Promise<Book[] | null> {
         try {
             const sql = "SELECT * FROM books"; // Asumiendo que tu tabla se llama 'books'
@@ -58,11 +59,11 @@ export class MysqlBookRepository implements IBookRepositorio {
             // Filtra los libros donde loan_status es false
             const sql = "SELECT * FROM books WHERE loan_status = false";
             const [rows]: any = await query(sql);
-    
+
             if (!Array.isArray(rows) || rows.length === 0) {
                 return null;
             }
-    
+
             const books: Book[] = rows.map(row => {
                 return new Book(
                     row.id,
@@ -75,9 +76,9 @@ export class MysqlBookRepository implements IBookRepositorio {
                     row.loan_status
                 );
             });
-    
+
             return books;
-    
+
         } catch (error) {
             console.error('Error al obtener libros inactivos:', error);
             return null;
@@ -89,31 +90,31 @@ export class MysqlBookRepository implements IBookRepositorio {
             // Verificar si el libro con el uuid proporcionado existe
             const checkSql = "SELECT * FROM books WHERE id = ?";
             const [existingBooks]: any = await query(checkSql, [uuid]);
-    
+
             if (!Array.isArray(existingBooks) || existingBooks.length === 0) {
                 console.log('no encontrado pa')
                 return null;  // Libro no encontrado
             }
-    
+
             // Construir la consulta SQL de actualización dinámicamente
             const updates: string[] = [];
             const values: any[] = [];
-    
+
             if (title !== undefined) {
                 updates.push("title = ?");
                 values.push(title);
             }
-    
+
             if (author !== undefined) {
                 updates.push("author = ?");
                 values.push(author);
             }
-    
+
             if (description !== undefined) {
                 updates.push("description = ?");
                 values.push(description);
             }
-    
+
             // Si no hay nada para actualizar, regresar el libro existente
             if (updates.length === 0) {
                 return new Book(
@@ -127,15 +128,15 @@ export class MysqlBookRepository implements IBookRepositorio {
                     existingBooks[0].loan_status
                 );
             }
-    
+
             const sql = `UPDATE books SET ${updates.join(", ")} WHERE id = ?`;
             values.push(uuid);
-    
+
             await query(sql, values);
-    
+
             // Devolver el libro actualizado
             const [updatedBooks]: any = await query(checkSql, [uuid]);
-    
+
             return new Book(
                 updatedBooks[0].id,
                 updatedBooks[0].title,
@@ -146,51 +147,51 @@ export class MysqlBookRepository implements IBookRepositorio {
                 updatedBooks[0].img_uer,
                 updatedBooks[0].loan_status
             );
-    
+
         } catch (error) {
             console.error('Error al actualizar el libro:', error);
             return null;
         }
     }
-    
+
     async deleteBook(uuid: string): Promise<string | null> {
         try {
             // Primero, verifiquemos si el libro con el uuid proporcionado existe
             console.log(uuid)
             const checkSql = "SELECT * FROM books WHERE id = ?";
             const [existingBooks]: any = await query(checkSql, [uuid]);
-    
+
             // Si no hay registros que coincidan, regresamos null indicando que el libro no fue encontrado
             if (!Array.isArray(existingBooks) || existingBooks.length === 0) {
-                return null;  
+                return null;
             }
-    
+
             // Si el libro existe, procedemos a eliminarlo
             const sql = "DELETE FROM books WHERE id = ?";
             await query(sql, [uuid]);
-    
+
             // Si la eliminación fue exitosa, regresamos un mensaje de éxito
             return `Book with UUID ${uuid} was successfully deleted.`;
-    
+
         } catch (error) {
             console.error('Error al eliminar el libro:', error);
             return null;
         }
     }
-    
+
 
     async getBookById(uuid: string): Promise<Book | null> {
         try {
             const sql = "SELECT * FROM books WHERE id = ?";
             const [rows]: any = await query(sql, [uuid]);
-    
+
             // Si no hay registros que coincidan, regresamos null indicando que el libro no fue encontrado
             if (!Array.isArray(rows) || rows.length === 0) {
                 return null;
             }
-    
+
             const row = rows[0]; // Como estamos buscando por ID, sólo debe haber una coincidencia
-    
+
             const book = new Book(
                 row.id,
                 row.title,
@@ -201,18 +202,124 @@ export class MysqlBookRepository implements IBookRepositorio {
                 row.img_uer, // Suponiendo que 'img_uer' es un error tipográfico y debería ser 'img_url' o algo similar
                 row.loan_status
             );
-    
+
             return book;
-    
+
         } catch (error) {
             console.error('Error al obtener el libro:', error);
             return null;
         }
     }
-    
-    
-   
-    
+
+    async activeBook(uuid: string): Promise<string | null> {
+        console.log('hojo')
+        try {
+            const sql = "UPDATE books SET loan_status = true WHERE id = ?";
+            const result: any = await query(sql, [uuid]);
+
+            if (result.affectedRows > 0) {
+                console.log('va')
+
+                return "Book status updated successfully!";
+            } else {
+                console.log('null')
+                return null; // Esto indica que ningún libro con ese UUID fue encontrado.
+            }
+        } catch (error) {
+            console.error('Error al actualizar el libro:', error);
+            return null;
+        }
+    }
+
+
+    async listByFilter(
+        filter: string,
+        title?: string | undefined,
+        author?: string | undefined,
+        invoice?: string | undefined,
+        unique_code?: string | undefined
+    ): Promise<Book[] | null> {
+        try {
+            let sql: string;
+            let value: string | undefined;
+
+            switch (filter) {
+                case 'title':
+                    if (!title) throw new Error('Title is required when filter is title');
+                    sql = 'SELECT * FROM books WHERE title = ?';
+                    value = title;
+                    break;
+                case 'author':
+                    if (!author) throw new Error('Author is required when filter is author');
+                    sql = 'SELECT * FROM books WHERE author = ?';
+                    value = author;
+                    break;
+                case 'invoice':
+                    if (!invoice) throw new Error('Invoice is required when filter is invoice');
+                    sql = 'SELECT * FROM books WHERE invoice = ?';
+                    value = invoice;
+                    break;
+                case 'unique_code':
+                    if (!unique_code) throw new Error('Unique code is required when filter is unique_code');
+                    sql = 'SELECT * FROM books WHERE unique_code = ?';
+                    value = unique_code;
+                    break;
+                default:
+                    throw new Error('Invalid filter type');
+            }
+
+            const [rows]: any = await query(sql, [value]);
+            if (!rows || rows.length === 0) return null;
+            return rows.map((row: Book) => new Book(row.uuid, row.title, row.author, row.description, row.invoice, row.unique_code, row.img_url, row.loan_status));
+
+        } catch (error) {
+            console.error(error);
+            return null;
+        }
+    }
+
+
+
+    async listIfReview(): Promise<Book[] | null> {
+        try {
+            const sql = `
+            SELECT DISTINCT
+            b.*
+            FROM books b
+            JOIN reviews r ON b.uuid = r.book_uuid;
+        
+                `;
+            const [rows]: any = await query(sql);
+
+            if (!Array.isArray(rows) || rows.length === 0) {
+                console.log('hola null')
+                return null;
+            }
+
+            const books: Book[] = rows.map(row => {
+                return new Book(
+                    row.id,
+                    row.title,
+                    row.author,
+                    row.description,
+                    row.invoice,
+                    row.unique_code,
+                    row.img_url,
+                    row.loan_status
+                );
+            });
+
+            return books;
+
+        } catch (error) {
+            console.error('Error al obtener los libros con reseñas:', error);
+            return null;
+        }
+    }
+
+
+
+
 
 }
 

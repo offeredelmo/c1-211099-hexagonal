@@ -8,12 +8,7 @@ export class DeleteBookController {
     async run(req: Request , res: Response) {
         try {
             let uuid = req.body.uuid;
-    
-            // Asegúrate de que un UUID fue enviado
-            console.log(uuid);
-            
             let getBook = await this.deleteBookUseCase.run(uuid);
-    
             if (getBook) {
                 return res.status(200).send({  // Cambiado el código de estado a 200 para OK
                     status: "success",

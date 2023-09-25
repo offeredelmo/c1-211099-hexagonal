@@ -1,4 +1,4 @@
-import { Book } from "../domain/book";
+
 import { IBookRepositorio } from "../domain/bookRepository";
 
 
@@ -7,7 +7,7 @@ export class DeleteBookUseCase {
     
     async run(
         uuid: string,
-    ): Promise<string | null> {
+    ):Promise<string | null> {
         
         try {
             const newBook = await this.bookRepository.deleteBook(uuid,)

@@ -2,16 +2,15 @@ import { Book } from "../domain/book";
 import { IBookRepositorio } from "../domain/bookRepository";
 
 
-export class GetBookByIdUseCase {
+export class ListIfReviewUseCase {
     constructor(readonly bookRepository: IBookRepositorio) {}
     
     async run(
-        uuid: string,
-    ): Promise<Book | null> {
-        
+
+    ): Promise<Book[] | null> {
         try {
-            const getBook = await this.bookRepository.getBookById(uuid)
-            return getBook;
+            const listBooksWhitRewview = await this.bookRepository.listIfReview()
+            return listBooksWhitRewview;
         } catch (error) {
             return null;
         }

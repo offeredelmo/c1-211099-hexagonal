@@ -28,11 +28,15 @@ export interface IBookRepositorio {
 
     getBookById(uuid:string):Promise<Book | null>
 
-    // listBookByAttribute(attribute: string): Promise<Book[] | null>//posiblemente cambiarlo a int 1:titulo 2: autor 3: folio
-    // getBookById(id: number): Promise<Book | null>;
+    activeBook(uuid:string):Promise<string | null>
 
+    listByFilter(
+        filter:string,
+        title?:string,
+        author?:string,
+        invoice?:string,
+        unique_code?:string
+        ):Promise<Book[] | null>
 
-    // updateBook(id: string, book: Book): Promise<void>;
-    // deleteUser(id: string): Promise<void>;
-    // activateBook(onOff: boolean): Promise<void>;
+    listIfReview():Promise<Book[] | null>
 }
