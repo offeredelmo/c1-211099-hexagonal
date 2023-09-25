@@ -1,16 +1,13 @@
 export class Book {
     constructor(
-        id: string,
-        title: string,
-        author: string,
-        description: string,
-        invoice: string,
-        unique_code: string,
-        img_uer: string,
-        loan_status: boolean
+       public uuid: string,
+       public title: string,
+       public author: string,
+       public description: string,
+       public invoice: string,
+       public unique_code: string,
+       public img_url: string,
+       public loan_status: boolean
     ){}
     
-    // Otros campos si es necesario
-
-    // Puedes agregar lógica relacionada con el libro aquí
 }
