@@ -8,11 +8,11 @@ export class ActivateBookUseCae {
     async run(
         uuid: string,
     ): Promise<string | null> {
-        console.log('hojo')
+     
         try {
-            console.log('hojo')
+          
             const activeBook = await this.bookRepository.activeBook(uuid)
-            console.log('hojo')
+           
             return activeBook;
         } catch (error) {
             return null;
