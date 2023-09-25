@@ -1,4 +1,4 @@
-import { query } from "../../databse/connect";
+import { query } from "../../database/connection";
 import { User } from "../domain/user";
 import { IUsuarioRepository } from "../domain/userRepository";
 import { compare, encrypt } from './helpers/ashs';
@@ -126,7 +126,7 @@ export class MysqlUserRepository implements IUsuarioRepository {
             const values = keys.map(key => updates[key]);
             values.push(uuid); // Añade el UUID al final del array de valores.
             await query(sql, values); // Ejecuta la consulta SQL.
-            console.log('Antes de la consulta SELECT');
+          
             const [updatedRows]: any = await query('SELECT * FROM users WHERE uuid = ?', [uuid]);
             if (!updatedRows || updatedRows.length === 0) {
                 throw new Error('No user found with the provided UUID.');
@@ -225,7 +225,7 @@ export class MysqlUserRepository implements IUsuarioRepository {
         try {
             // Primero, obtener el usuario por email.
             const [users]: any = await query('SELECT * FROM users WHERE email = ? LIMIT 1', [email]);
-            console.log([users])
+          
             if (!users || users.length === 0) {
                 return null
             }
@@ -234,7 +234,7 @@ export class MysqlUserRepository implements IUsuarioRepository {
 
             // Verificar si la contraseña proporcionada coincide con la almacenada en la base de datos.
             const passwordMatches = await compare(password, user.password);
-            console.log(password,user.password)
+          
 
             if (!passwordMatches) {
                 return 'Unauthorized'

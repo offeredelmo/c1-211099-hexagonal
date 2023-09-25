@@ -14,7 +14,6 @@ export const validateToken = async (req: Request, res: Response, next: NextFunct
     }
 
     const tokenData = await verifyToken(token);
-    console.log(tokenData)
   
     if (tokenData && tokenData.uuid) {
         next();

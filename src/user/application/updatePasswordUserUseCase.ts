@@ -9,7 +9,7 @@ export class UpdatePasswordUserUsecase {
         uuid: string,
         password: string
         ): Promise<User | null> {
-        console.log("usecase")
+       
         try {
             const updatePUserById = await this.usuarioRepository.updatePassword(uuid,password);
             return updatePUserById;
