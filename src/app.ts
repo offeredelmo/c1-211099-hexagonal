@@ -2,13 +2,14 @@ import express from "express";
 import cors from "cors";
 import "dotenv/config";
 import { Signale } from 'signale';
-import { bookRoutes } from "./book/infraestructure/bookRouter";
+// import { bookRoutes } from "./book/infraestructure/bookRouter";
 // import { userRoutes } from "./user/infraestructure/userRouter";
 
 import * as admin from "firebase-admin";
 import { Bucket } from "@google-cloud/storage";
 
 import fileUpload from 'express-fileupload';
+import { reviewRouter } from "./review/infrestructure/reviewRoutes";
 
 // Ruta al archivo de credenciales
 
@@ -31,6 +32,8 @@ app.use(express.urlencoded({ extended: true }));
 // app.use('/user', userRoutes);
 
 // app.use('/book',bookRoutes)
+
+app.use('/review',reviewRouter)
 
 const port = process.env.PORT || 3001;
 app.listen(port, () => {
