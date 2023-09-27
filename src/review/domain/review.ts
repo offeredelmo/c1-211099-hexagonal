@@ -4,7 +4,8 @@ export class Review {
         id_user: string,
         id_book: string,
         date: string,
-        review:string
+        review:string,
+        status:boolean
     ) {
         
     }
