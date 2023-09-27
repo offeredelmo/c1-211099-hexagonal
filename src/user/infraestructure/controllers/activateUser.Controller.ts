@@ -28,6 +28,15 @@ export class ActivateUserController {
                 });
             }
         } catch (error) {   
+            if (error instanceof Error) {
+                if (error.message.startsWith('[')) {
+                    return res.status(400).send({
+                        status: "error",
+                        message: "Validation failed",
+                        errors: JSON.parse(error.message)
+                    });
+                }
+            } 
             return res.status(500).send({
                 status: "error",
                 message: "An error occurred while activating the user."

@@ -1,19 +1,22 @@
 import { query } from "../../database/connection";
 import { User } from "../domain/user";
 import { IUsuarioRepository } from "../domain/userRepository";
-import { compare, encrypt } from './helpers/ashs';
-import { tokenSigIn } from "./helpers/token";
+import { compare, encrypt } from '../../helpers/ashs';
+import { tokenSigIn } from "../../helpers/token";
 
 
 export class MysqlUserRepository implements IUsuarioRepository {
 
 
     async registerUser(uuid: string, name: string, last_name: string, phone_number: string, email: string, password: string, loan_status: boolean, status: boolean): Promise<User | null | void> {
+      
         try {
-            const hashPassword = await encrypt(password)
+            // const hashPassword = await encrypt(password)
+            console.log(password)
             let sql = "INSERT INTO users(uuid, name, last_name, phone_number , email, password, loan_status,status) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-            const params: any[] = [uuid, name, last_name, phone_number, email, hashPassword, loan_status, status];
+            const params: any[] = [uuid, name, last_name, phone_number, email, password, loan_status, status];
             const [result]: any = await query(sql, params);
+            console.log([result])
             return new User(uuid, name, last_name, phone_number, email, password, loan_status, status);
         } catch (error) {
             return null;
@@ -233,7 +236,7 @@ export class MysqlUserRepository implements IUsuarioRepository {
             const user = users[0];
 
             // Verificar si la contraseña proporcionada coincide con la almacenada en la base de datos.
-            const passwordMatches = await compare(password, user.password);
+            const passwordMatches = await compare(password, user.password); //pasar a la parte 
           
 
             if (!passwordMatches) {

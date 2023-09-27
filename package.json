@@ -14,6 +14,8 @@
     "@sequelize/core": "^7.0.0-alpha.32",
     "@types/uuid": "^9.0.4",
     "bcrypt": "^5.1.1",
+    "class-transformer": "^0.5.1",
+    "class-validator": "^0.14.0",
     "cors": "^2.8.5",
     "dotenv": "^16.3.1",
     "express": "^4.18.2",
