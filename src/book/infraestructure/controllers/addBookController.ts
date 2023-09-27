@@ -33,7 +33,6 @@ export class AddBookController {
             const img_url = await uploadToFirebase(imgFile)
             // Usa el archivo cargado de req.file para subirlo a Firebase
 
-
             let newBook = await this.addBookUseCaseController.run(miuuid, title, author, description, invoice, unique_code, img_url, loan_status);
 
             if (newBook) {
@@ -51,6 +50,15 @@ export class AddBookController {
             }
 
         } catch (error) {
+            if (error instanceof Error) {
+                if (error.message.startsWith('[')) {
+                    return res.status(400).send({
+                        status: "error",
+                        message: "Validation failed",
+                        errors: JSON.parse(error.message)
+                    });
+                }
+            } 
             return res.status(500).send({
                 status: "error",
                 message: "An error occurred while adding the book."

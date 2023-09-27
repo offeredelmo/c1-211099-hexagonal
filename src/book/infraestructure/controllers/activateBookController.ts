@@ -30,6 +30,15 @@ export class ActivateBookController {
             }
             
         }  catch (error) {
+            if (error instanceof Error) {
+                if (error.message.startsWith('[')) {
+                    return res.status(400).send({
+                        status: "error",
+                        message: "Validation failed",
+                        errors: JSON.parse(error.message)
+                    });
+                }
+            } 
             console.error("Error en ActivateBookController:", error);
             return res.status(500).send({
                 status: "error",

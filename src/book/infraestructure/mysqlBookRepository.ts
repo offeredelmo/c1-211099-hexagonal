@@ -6,15 +6,16 @@ import { IBookRepositorio } from "../domain/bookRepository";
 export class MysqlBookRepository implements IBookRepositorio {
 
 
-    async addBook(id: string, title: string, author: string, description: string, invoice: string, unique_code: string, img_url: string, loan_status: boolean): Promise<Book | null> {
+    async addBook(uuid: string, title: string, author: string, description: string, invoice: string, unique_code: string, img_url: string, loan_status: boolean): Promise<Book | null> {
         try {
             const sql = `
-                INSERT INTO books (id, title, author, description, invoice, unique_code, img_uer, loan_status)
+                INSERT INTO books (uuid, title, author, description, invoice, unique_code, img_url, loan_status)
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?);
             `;
-            const values = [id, title, author, description, invoice, unique_code, img_url, loan_status];
-            // Devuelve el libro recién añadido
-            const newBook: Book = new Book(id, title, author, description, invoice, unique_code, img_url, loan_status)
+            const params = [uuid, title, author, description, invoice, unique_code, img_url, loan_status];
+            const [result]: any = await query(sql, params);
+        
+            const newBook: Book = new Book(uuid, title, author, description, invoice, unique_code, img_url, loan_status)
             return newBook
 
         } catch (error) {
@@ -35,13 +36,13 @@ export class MysqlBookRepository implements IBookRepositorio {
 
             const books: Book[] = rows.map(row => {
                 return new Book(
-                    row.id,
+                    row.uuid,
                     row.title,
                     row.author,
                     row.description,
                     row.invoice,
                     row.unique_code,
-                    row.img_uer,
+                    row.img_url,
                     row.loan_status
                 );
             });
@@ -88,11 +89,10 @@ export class MysqlBookRepository implements IBookRepositorio {
     async updateBook(uuid: string, title?: string, author?: string, description?: string): Promise<Book | null> {
         try {
             // Verificar si el libro con el uuid proporcionado existe
-            const checkSql = "SELECT * FROM books WHERE id = ?";
+            const checkSql = "SELECT * FROM books WHERE uuid = ?";
             const [existingBooks]: any = await query(checkSql, [uuid]);
 
             if (!Array.isArray(existingBooks) || existingBooks.length === 0) {
-                console.log('no encontrado pa')
                 return null;  // Libro no encontrado
             }
 
@@ -129,7 +129,7 @@ export class MysqlBookRepository implements IBookRepositorio {
                 );
             }
 
-            const sql = `UPDATE books SET ${updates.join(", ")} WHERE id = ?`;
+            const sql = `UPDATE books SET ${updates.join(", ")} WHERE uuid = ?`;
             values.push(uuid);
 
             await query(sql, values);
@@ -157,8 +157,7 @@ export class MysqlBookRepository implements IBookRepositorio {
     async deleteBook(uuid: string): Promise<string | null> {
         try {
             // Primero, verifiquemos si el libro con el uuid proporcionado existe
-            console.log(uuid)
-            const checkSql = "SELECT * FROM books WHERE id = ?";
+            const checkSql = "SELECT * FROM books WHERE uuid = ?";
             const [existingBooks]: any = await query(checkSql, [uuid]);
 
             // Si no hay registros que coincidan, regresamos null indicando que el libro no fue encontrado
@@ -167,7 +166,7 @@ export class MysqlBookRepository implements IBookRepositorio {
             }
 
             // Si el libro existe, procedemos a eliminarlo
-            const sql = "DELETE FROM books WHERE id = ?";
+            const sql = "DELETE FROM books WHERE uuid = ?";
             await query(sql, [uuid]);
 
             // Si la eliminación fue exitosa, regresamos un mensaje de éxito
@@ -182,7 +181,7 @@ export class MysqlBookRepository implements IBookRepositorio {
 
     async getBookById(uuid: string): Promise<Book | null> {
         try {
-            const sql = "SELECT * FROM books WHERE id = ?";
+            const sql = "SELECT * FROM books WHERE uuid = ?";
             const [rows]: any = await query(sql, [uuid]);
 
             // Si no hay registros que coincidan, regresamos null indicando que el libro no fue encontrado
@@ -212,17 +211,14 @@ export class MysqlBookRepository implements IBookRepositorio {
     }
 
     async activeBook(uuid: string): Promise<string | null> {
-        console.log('hojo')
         try {
-            const sql = "UPDATE books SET loan_status = true WHERE id = ?";
+            const sql = "UPDATE books SET loan_status = true WHERE uuid = ?";
             const result: any = await query(sql, [uuid]);
 
             if (result.affectedRows > 0) {
-                console.log('va')
 
                 return "Book status updated successfully!";
             } else {
-                console.log('null')
                 return null; // Esto indica que ningún libro con ese UUID fue encontrado.
             }
         } catch (error) {
@@ -292,7 +288,6 @@ export class MysqlBookRepository implements IBookRepositorio {
             const [rows]: any = await query(sql);
 
             if (!Array.isArray(rows) || rows.length === 0) {
-                console.log('hola null')
                 return null;
             }
 

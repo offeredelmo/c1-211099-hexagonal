@@ -19,16 +19,16 @@ export interface IBookRepositorio {
 
     updateBook(
         uuid:string,
-        title: string,
-        author: string,
-        description: string,
+        title?: string,
+        author?: string,
+        description?: string,
     ): Promise<Book | null>;
 
-    deleteBook(uuid:string):Promise<string | null>
+    deleteBook(uuid:string):Promise<string | null> 
 
-    getBookById(uuid:string):Promise<Book | null>
+    getBookById(uuid:string):Promise<Book | null> 
 
-    activeBook(uuid:string):Promise<string | null>
+    activeBook(uuid:string):Promise<string | null> 
 
     listByFilter(
         filter:string,

@@ -7,7 +7,6 @@ export class ListIfReviewController {
     constructor(readonly listByFilterUseCase : ListIfReviewUseCase) {}
     async run(req:Request, res:Response) {
         try {
-            console.log('0aasda')
             let listByFilter = await this.listByFilterUseCase.run()
 
             if(listByFilter){
