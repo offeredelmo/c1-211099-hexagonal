@@ -12,20 +12,20 @@ export interface IUsuarioRepository {
         status: boolean
     ): Promise<User | null | void>;
 
-    loginUser(email:string, password:string):Promise<string | null> // ya se valida class
+    loginUser(email:string, password:string):Promise<string | null> 
 
-    listAllUsers(): Promise<User[] | null> // no necesita validacion
+    listAllUsers(): Promise<User[] | null> 
 
-    listAllUserIactive(): Promise<User[] | User | null> // no necesita validacion
+    listAllUserIactive(): Promise<User[] | User | null> 
 
-    getUserByFilter( // ya se valida class
+    getUserByFilter( 
         filter: string,
         email?: string,
         name?: string,
         phone_number?: string
     ): Promise<User | User[] | null>
 
-    getUserById(uuid: string): Promise<User | null> //ya se validacion class
+    getUserById(uuid: string): Promise<User | null> 
 
     updateUserById(
         uuid: string,
@@ -35,11 +35,13 @@ export interface IUsuarioRepository {
         email?: string,
     ): Promise<User | null>
 
-    updatePassword(uuid: string, password: string): Promise<User | null> //ya se valida class
+    updatePassword(uuid: string, password: string): Promise<User | null> 
 
-    deleteUserById(uuid: String): Promise<string | null> //ya validacion class
+    deleteUserById(uuid: String): Promise<string | null> 
 
-    activateUser(uuid: string): Promise<string | null> //ya se valida class
+    activateUser(uuid: string): Promise<string | null> 
+
+    inactivateUser(uuid: string):Promise<string | null>
 
 }
 

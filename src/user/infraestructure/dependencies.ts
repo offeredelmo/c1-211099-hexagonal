@@ -30,6 +30,9 @@ import { ActivateUserController } from "./controllers/activateUser.Controller";
 import { LoginUserController } from "./controllers/loginUserController";
 import { LoginUserUseCase } from "../application/loginUserUseCase";
 
+import { InactivateUserUseCase } from "../application/inactivateUserUseCase";
+import { InactivationUserController } from "./controllers/inactivateUserController";
+
 
 
 export const mysqlUserRepository = new MysqlUserRepository()
@@ -66,3 +69,5 @@ export const loginUserUseCase = new LoginUserUseCase(mysqlUserRepository)
 export const loginUserController = new LoginUserController(loginUserUseCase)
 
 
+export const inactivateUserUseCase = new InactivateUserUseCase(mysqlUserRepository)
+export const inactivationUserController = new InactivationUserController(inactivateUserUseCase)

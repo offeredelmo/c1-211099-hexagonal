@@ -1,5 +1,5 @@
 import express from "express";
-import { activateUserController, deleteUserController, getUserByFilterController, getUserByIdController, listAllUserActiveController, listAllUserController, loginUserController, resgisterUserController, updatePasswordController, updateUserByIdController } from "./dependencies";
+import { activateUserController, deleteUserController, getUserByFilterController, getUserByIdController, inactivationUserController, listAllUserActiveController, listAllUserController, loginUserController, resgisterUserController, updatePasswordController, updateUserByIdController } from "./dependencies";
 import { validateToken } from "../../helpers/veryfyToken";
 
 
@@ -21,13 +21,16 @@ userRoutes.get('/id',validateToken,getUserByIdController.run.bind(getUserByIdCon
 
 userRoutes.post('/id',validateToken,updateUserByIdController.run.bind(updateUserByIdController))
 
-userRoutes.post('/restar_password',updatePasswordController.run.bind(updatePasswordController))
+userRoutes.post('/restar_password',validateToken,updatePasswordController.run.bind(updatePasswordController))
 
 userRoutes.delete('/',validateToken,deleteUserController.run.bind(deleteUserController))
 
-userRoutes.post('/activate',activateUserController.run.bind(activateUserController))
+userRoutes.post('/activate',validateToken,activateUserController.run.bind(activateUserController))
 
 userRoutes.post('/login',loginUserController.run.bind(loginUserController))
+
+userRoutes.post('/inactivate',validateToken,inactivationUserController.run.bind(inactivationUserController))
+
 
 
 

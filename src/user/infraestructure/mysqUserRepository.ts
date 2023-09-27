@@ -6,7 +6,7 @@ import { tokenSigIn } from "../../helpers/token";
 
 
 export class MysqlUserRepository implements IUsuarioRepository {
-
+    
 
     async registerUser(uuid: string, name: string, last_name: string, phone_number: string, email: string, password: string, loan_status: boolean, status: boolean): Promise<User | null | void> {
       
@@ -107,6 +107,8 @@ export class MysqlUserRepository implements IUsuarioRepository {
             console.error(error);
             return null; // En caso de error, retornamos null
         }
+
+        
     }
 
 
@@ -255,5 +257,20 @@ export class MysqlUserRepository implements IUsuarioRepository {
     }
 
 
+    async inactivateUser(uuid: string): Promise<string | null> {
+        try {
+
+            const sql = 'UPDATE users SET status = false WHERE uuid = ?';
+            const [resultSet]: any = await query(sql, [uuid]);
+
+            if (!resultSet || resultSet.affectedRows === 0) {
+                return null;
+            }
+            return 'User inactive successfully.';
+        } catch (error) {
+            console.error('Error activating user:', error);
+            throw error; // O maneja el error de la manera que prefieras.
+        }
+    }
 
 }

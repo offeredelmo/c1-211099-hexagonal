@@ -3,7 +3,7 @@ import { IUsuarioRepository } from "../domain/userRepository";
 import { ValidatorId } from "../domain/validations/user";
 
 
-export class ActivateUserUseCase {
+export class InactivateUserUseCase {
     constructor(readonly userRepository: IUsuarioRepository) {}
 
     async run(uuid:string):Promise<string | null>{
@@ -14,8 +14,8 @@ export class ActivateUserUseCase {
             throw new Error(JSON.stringify(validation));
         }
         try {
-            const activationUser = await this.userRepository.activateUser(uuid);
-            return activationUser;
+            const inactivationUser = await this.userRepository.inactivateUser(uuid);
+            return inactivationUser;
         } catch (error) {
             return null;
         }
