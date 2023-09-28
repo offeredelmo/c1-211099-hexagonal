@@ -70,33 +70,33 @@ export class MysqlLoanRepository implements ILoanRepository {
                 SELECT uuid_user, uuid_book FROM loans WHERE uuid = ?;
             `;
             const [loanDetails]: any = await query(getLoanDetailsSql, [uuid]);
-    
+
             if (!loanDetails || loanDetails.length === 0) {
                 throw new Error("Préstamo no encontrado.");
             }
-    
+
             const { uuid_user, uuid_book } = loanDetails[0];
-    
+
             // 2. Actualizar loan_status en users y books a FALSE
             const updateUserLoanStatusSql = `
                 UPDATE users SET loan_status = FALSE WHERE uuid = ?;
             `;
             await query(updateUserLoanStatusSql, [uuid_user]);
-    
+
             const updateBookLoanStatusSql = `
                 UPDATE books SET loan_status = FALSE WHERE uuid = ?;
             `;
             await query(updateBookLoanStatusSql, [uuid_book]);
-    
+
             // 3. Actualizar el status del préstamo en la tabla loans a FALSE
             const updateLoanStatusSql = `
                 UPDATE loans SET status = FALSE WHERE uuid = ?;
             `;
             await query(updateLoanStatusSql, [uuid]);
-    
+
             // Retornar un mensaje indicando que el proceso fue exitoso
             return "Préstamo devuelto con éxito.";
-    
+
         } catch (error) {
             console.error("Error al devolver el libro:", error);
             if (error instanceof Error) {
@@ -106,7 +106,25 @@ export class MysqlLoanRepository implements ILoanRepository {
         }
     }
 
-    listAllLoans(): Promise<Loan[] | null> {
-        throw new Error("Method not implemented.");
+    async listAllLoans(): Promise<Loan[] | Error> {
+        try {
+            // 1. Consulta SQL para obtener todos los préstamos
+           
+            const sql = "SELECT * FROM loans;";
+            const [rows]: any = await query(sql); // Esto probablemente devuelve un tipo de dato más complejo
+           
+            if (!Array.isArray(rows)) {
+                throw new Error('Rows is not an array'); // o maneja este caso como prefieras
+            }
+
+            // 2. Convertir los resultados en una lista de objetos Loan
+            const loans: Loan[] = rows.map((row => new Loan(row.uuid, row.uuid_book, row.uuid_user, row.loan_date, row.deadline, row.status)));
+                console.log(loans[0])
+            return loans;
+
+        } catch (error) {
+            console.error("Error al obtener todos los préstamos:", error);
+            return new Error("Ocurrió un error al obtener todos los préstamos.");
+        }
     }
 }

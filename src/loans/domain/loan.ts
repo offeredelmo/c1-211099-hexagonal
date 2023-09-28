@@ -1,11 +1,11 @@
 export class Loan {
     constructor(
-        uuid: string,
-        uuid_book: string,
-        uuid_user: string,
-        loan_date: string,
-        dedline: string,
-        status: boolean
+        public uuid: string,
+        public uuid_book: string,
+        public uuid_user: string,
+        public loan_date: string,
+        public dedline: string,
+        public status: boolean
     ) {
         
     }

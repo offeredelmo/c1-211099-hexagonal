@@ -14,7 +14,7 @@ export class UserLoanBookUseCase {
         loan_date: string,
         dedline: string,
         staus: boolean,
-    ): Promise<Loan | Error> {
+    ): Promise<Loan | string | Error> {
         let post = new ValidationUserLoanBook(uuid,uuid_book,uuid_user,loan_date,dedline,staus)
         const validation = await validate(post)
         if (validation.length > 0) {

@@ -14,5 +14,5 @@ export interface ILoanRepository {
         uuid:string
     ):Promise<string | Error>
 
-    listAllLoans():Promise<Loan[] |  null>
+    listAllLoans():Promise<Loan[] |  Error>
 }

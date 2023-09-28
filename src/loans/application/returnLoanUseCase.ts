@@ -10,7 +10,7 @@ export class ReturnLoanUseCase {
     async run(
         uuid: string,
      
-    ): Promise<Loan | Error> {
+    ): Promise<Loan | string | Error>  {
         let post = new ValidationId(uuid)
         const validation = await validate(post)
         if (validation.length > 0) {
