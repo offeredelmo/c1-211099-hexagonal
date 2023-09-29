@@ -19,6 +19,10 @@ import { DeleteReviewUseCase } from "../application/deleteReviewUseCase";
 import { DeleteReviewController } from "./controllers/deleteReviewController";
 import { UpdateReviewUseCase } from "../application/updateReviewUseCase";
 import { UpdateReviewController } from "./controllers/updateReviewController";
+import { InactivateReviewUseCase } from "../application/inactiveReviewUseCase";
+import { InactivationReviewController } from "./controllers/inactiveReviewController";
+import { ActivateReviewUseCase } from "../application/activateReviewUseCase";
+import { ActivateReviewController } from "./controllers/activateReviewController";
 
 
 
@@ -43,3 +47,9 @@ export const deleteReviewController = new DeleteReviewController(deleteReviewUse
 
 export const updateReviewUseCase = new UpdateReviewUseCase(mysqlReviewRepository)
 export const updateReviewController = new UpdateReviewController(updateReviewUseCase)
+
+export const inactivateReviewUseCase = new InactivateReviewUseCase(mysqlReviewRepository)
+export const inactiveteReviewController = new InactivationReviewController(inactivateReviewUseCase)
+
+export const activateReviewUseCase = new ActivateReviewUseCase(mysqlReviewRepository)
+export const activateReviewController = new ActivateReviewController(activateReviewUseCase)

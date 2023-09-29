@@ -6,7 +6,7 @@ import { AddReviewUseCase } from "../../application/addReviewUseCase";
 export class AddReviewController {
 
     constructor(readonly addReviewUseCase: AddReviewUseCase) { }
-
+    //si se presta un libro el estatus pasa loan_status true por lo tanto al hacer una review de un libro que ya devolvi no puedo hacerle review /modificar logica despues
     async run(req: Request , res: Response) {
         try {
 

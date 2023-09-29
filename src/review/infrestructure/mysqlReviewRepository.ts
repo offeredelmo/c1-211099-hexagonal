@@ -4,10 +4,6 @@ import { IreviewRepository } from "../domain/reviewRepository";
 import { validateReviewConditions, validateReviewExist, validateUserExist } from "./validation/reviewmysql";
 
 export class MysqlReviewRepository implements IreviewRepository {
-    inactiveReview(uuid_review: string): Promise<string | Error> {
-        throw new Error("Method not implemented.");
-    }
-
 
 
 
@@ -239,7 +235,53 @@ export class MysqlReviewRepository implements IreviewRepository {
         }
     }
 
+    async inactiveReview(uuid_review: string): Promise<string | null> {
+        try {
+            // SQL statement to set status to false for the specified review
+            const updateReviewStatusSql = `
+                UPDATE reviews 
+                SET status = FALSE
+                WHERE uuid = ?;
+            `;
 
+            const [result]: any = await query(updateReviewStatusSql, [uuid_review]);
+
+            if (result.affectedRows === 0) {
+                // No rows were updated, which means the UUID was not found
+                return null;
+            }
+
+            return "Review status set to inactive successfully.";
+
+        } catch (error) {
+            console.error("Error inactivating review:", error);
+            throw new Error("Failed to set the review status to inactive.");
+        }
+    }
+
+    async activateReview(uuid_review: string): Promise<string | null> {
+        try {
+            // SQL statement to set status to false for the specified review
+            const updateReviewStatusSql = `
+                UPDATE reviews 
+                SET status = TRUE
+                WHERE uuid = ?;
+            `;
+
+            const [result]: any = await query(updateReviewStatusSql, [uuid_review]);
+
+            if (result.affectedRows === 0) {
+                // No rows were updated, which means the UUID was not found
+                return null;
+            }
+
+            return "Review status set to activate successfully.";
+
+        } catch (error) {
+            console.error("Error inactivating review:", error);
+            throw new Error("Failed to set the review status to inactive.");
+        }
+    }
 
 
 }

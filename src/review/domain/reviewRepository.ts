@@ -22,5 +22,8 @@ export interface IreviewRepository {
 
    updateReview(uuid_review:string,uuid_user:string,date: string, review:string,):Promise<Review| Error | string >
 
-   inactiveReview(uuid_review:string):Promise<string | Error>
+   inactiveReview(uuid_review:string):Promise<string | null >
+   
+   activateReview(uuid_review:string):Promise<string | null >
+
 }
