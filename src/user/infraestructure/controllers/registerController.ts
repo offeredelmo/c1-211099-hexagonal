@@ -1,7 +1,6 @@
 import { Request, Response } from "express";
 import { RegisterUserUseCase } from "../../application/registerUseCase";
-import { v4 as uuid } from "uuid";
-import { compare, encrypt } from '../../../helpers/ashs';
+import { User } from "../../domain/user";
 
 
 export class ResgisterUserController {
@@ -17,10 +16,10 @@ export class ResgisterUserController {
                 phone_number,
                 email,
                 password,
-            } = req.body    
+            } = req.body
             console.log(req.body)
 
-           
+
 
             let registerUser = await this.registerUserUseCase.run(
                 name,
@@ -29,8 +28,13 @@ export class ResgisterUserController {
                 email,
                 password,
             )
-
-            if (registerUser) {
+            if (registerUser instanceof Error) {
+                return res.status(409).send({
+                    status: "error",
+                    message: registerUser.message
+                });
+            }
+            if (registerUser instanceof User) {
                 return res.status(201).send({
                     status: "succes",
                     data: {
@@ -40,6 +44,12 @@ export class ResgisterUserController {
                         phone_number: registerUser.phone_number
                     }
                 })
+            }
+            else {
+                return res.status(500).send({
+                    status: "error",
+                    message: "An unexpected error occurred while register the user."
+                });
             }
 
         } catch (error) {

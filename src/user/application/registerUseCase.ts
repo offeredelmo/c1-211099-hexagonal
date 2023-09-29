@@ -17,7 +17,7 @@ export class RegisterUserUseCase {
         phone_number: string,
         email: string,
         password:string
-    ): Promise<User | null | void> {
+    ): Promise<User | null | string | Error>{
 
         //valres generados 
         const miuuid: string = uuid()

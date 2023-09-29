@@ -3,23 +3,26 @@ import { User } from "../domain/user";
 import { IUsuarioRepository } from "../domain/userRepository";
 import { compare, encrypt } from '../../helpers/ashs';
 import { tokenSigIn } from "../../helpers/token";
+import { isEmailRegistered } from "./validation/usermysql";
 
 
 export class MysqlUserRepository implements IUsuarioRepository {
     
 
-    async registerUser(uuid: string, name: string, last_name: string, phone_number: string, email: string, password: string, loan_status: boolean, status: boolean): Promise<User | null | void> {
+    async registerUser(uuid: string, name: string, last_name: string, phone_number: string, email: string, password: string, loan_status: boolean, status: boolean): Promise<User | null | string | Error> {
       
         try {
             // const hashPassword = await encrypt(password)
-            console.log(password)
+            
+            await isEmailRegistered(email)
+           
             let sql = "INSERT INTO users(uuid, name, last_name, phone_number , email, password, loan_status,status) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
             const params: any[] = [uuid, name, last_name, phone_number, email, password, loan_status, status];
             const [result]: any = await query(sql, params);
-            console.log([result])
             return new User(uuid, name, last_name, phone_number, email, password, loan_status, status);
         } catch (error) {
-            return null;
+            console.error("Error adding review:", error);
+            return error as Error;
         }
     }
 

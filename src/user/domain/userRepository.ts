@@ -10,7 +10,7 @@ export interface IUsuarioRepository {
         password: string,
         loan_status: boolean,
         status: boolean
-    ): Promise<User | null | void>;
+    ): Promise<User | null | string | Error> ;
 
     loginUser(email:string, password:string):Promise<string | null> 
 
