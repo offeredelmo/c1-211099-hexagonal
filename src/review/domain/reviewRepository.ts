@@ -8,5 +8,15 @@ export interface IreviewRepository {
       date: string,
       review: string,
       status: boolean
-   ): Promise<Review | null>
+   ): Promise<Review | null | Error | string>
+
+   listAllReview(): Promise<Review[] | null>
+
+   listReviewsByUser(uuid:string):Promise<Review[] | string>
+
+   getReview(uuid:string):Promise<Review | string | null>
+
+   listReviewsInactive():Promise<Review[] | null>
+
+   deleteReview(uuid_review:string,uuid_user:string):Promise<string | Error>
 }

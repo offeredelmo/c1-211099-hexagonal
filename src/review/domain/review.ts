@@ -1,11 +1,11 @@
 export class Review {
     constructor(
-        uuid: string,
-        id_user: string,
-        id_book: string,
-        date: string,
-        review:string,
-        status:boolean
+        public uuid: string,
+        public id_user: string,
+        public id_book: string,
+        public date: string,
+        public review:string,
+        public status:boolean
     ) {
         
     }
