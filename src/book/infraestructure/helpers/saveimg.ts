@@ -21,11 +21,9 @@ async function uploadToFirebase(file: UploadedFile): Promise<string> {
                 contentType: file.mimetype,
             },
         });
-
         blobStream.on('error', (error) => {
             reject("Error uploading to Firebase Storage: " + error);
         });
-
         blobStream.on('finish', () => {
             const publicUrl = `https://firebasestorage.googleapis.com/v0/b/${bucket.name}/o/${encodeURIComponent(blob.name)}?alt=media`;
             resolve(publicUrl);
