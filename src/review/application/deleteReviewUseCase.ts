@@ -10,7 +10,7 @@ export class DeleteReviewUseCase {
     async run(
         uuid_review:string,
         uuid_user:string
-    ): Promise<string | Error> {
+    ): Promise<string | Error | null> {
 
         let post = new ValidateIds(uuid_review,uuid_user);
         const validation = await validate(post)
@@ -22,7 +22,7 @@ export class DeleteReviewUseCase {
             const DeleteReview = await this.ireviewRepository.deleteReview(uuid_review,uuid_user)
             return DeleteReview;
         } catch (error) {
-            return (error as Error).message;
+            return error as Error
         }
     }
 }

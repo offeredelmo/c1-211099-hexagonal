@@ -17,7 +17,7 @@ export class ListReviewsInactiveController {
                     }
                 })
             }else{
-                return res.status(200).send({
+                return res.status(404).send({
                     status: "ok",
                     message: "reviewa not found"
                 });

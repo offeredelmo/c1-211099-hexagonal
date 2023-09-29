@@ -4,6 +4,9 @@ import { IreviewRepository } from "../domain/reviewRepository";
 import { validateReviewConditions, validateReviewExist, validateUserExist } from "./validation/reviewmysql";
 
 export class MysqlReviewRepository implements IreviewRepository {
+    inactiveReview(uuid_review: string): Promise<string | Error> {
+        throw new Error("Method not implemented.");
+    }
 
 
 
@@ -73,7 +76,7 @@ export class MysqlReviewRepository implements IreviewRepository {
         }
     }
 
-    async listReviewsByUser(uuid: string): Promise<Review[] | string> {
+    async listReviewsByUser(uuid: string): Promise<Review[] | string | Error> {
         try {
             await validateUserExist(uuid)
             // 1. Consulta SQL para obtener todas las reviews de un usuario específico
@@ -98,11 +101,11 @@ export class MysqlReviewRepository implements IreviewRepository {
 
         } catch (error) {
             console.error("Error adding review:", error);
-            return (error as Error).message;
+            return error as Error
         }
     }
 
-    async getReview(uuid: string): Promise<Review | null | string> {
+    async getReview(uuid: string): Promise<Review | Error> {
         try {
             await validateReviewExist(uuid)
 
@@ -110,11 +113,6 @@ export class MysqlReviewRepository implements IreviewRepository {
             // 1. Consulta SQL para obtener la review con el UUID específico
             const sql = "SELECT * FROM reviews WHERE uuid = ?;";
             const [rows]: any = await query(sql, [uuid]);
-
-            // Verificar si obtuvimos un resultado
-            if (!Array.isArray(rows) || rows.length === 0) {
-                return null; // Puedes retornar null si no se encuentra la review con ese UUID.
-            }
 
             // Tomar la primera fila como resultado (debido a que UUID es único, solo deberíamos tener un resultado)
             const row = rows[0];
@@ -133,7 +131,7 @@ export class MysqlReviewRepository implements IreviewRepository {
 
         } catch (error) {
             console.error("Error adding review:", error);
-            return (error as Error).message;
+            return error as Error
         }
     }
 
@@ -158,7 +156,7 @@ export class MysqlReviewRepository implements IreviewRepository {
         }
     }
 
-    async deleteReview(uuid_review: string, uuid_user: string): Promise<string> {
+    async deleteReview(uuid_review: string, uuid_user: string): Promise<string | Error | null> {
         try {
             await validateReviewExist(uuid_review)
             await validateUserExist(uuid_user)
@@ -172,7 +170,7 @@ export class MysqlReviewRepository implements IreviewRepository {
             }
 
             if (validationResults[0].uuid_user !== uuid_user) {
-                throw new Error("No tienes permiso para eliminar esta review.");
+                return ('unauthorized')
             }
 
             // Paso 2: Eliminar la review
@@ -188,7 +186,7 @@ export class MysqlReviewRepository implements IreviewRepository {
 
         } catch (error) {
             console.error("Error adding review:", error);
-            return (error as Error).message;
+            return error as Error
         }
     }
 
@@ -204,7 +202,7 @@ export class MysqlReviewRepository implements IreviewRepository {
             `;
             const [ownershipResults]: any = await query(checkOwnershipSql, [uuid_review, uuid_user]);
             if (ownershipResults[0].count === 0) {
-                throw new Error("El usuario no tiene permiso para modificar esta revisión.");
+                return ('unauthorized')
             }
 
             // 2. Actualizar la revisión
@@ -237,7 +235,7 @@ export class MysqlReviewRepository implements IreviewRepository {
 
         } catch (error) {
             console.error("Error adding review:", error);
-            return (error as Error).message;
+            return error as Error
         }
     }
 

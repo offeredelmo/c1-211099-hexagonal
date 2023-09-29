@@ -13,12 +13,12 @@ export class GetReviewByIdController {
             let getReview = await this.getReviewByIdUseCase.run(uuid as string)
 
             if (getReview instanceof Error) {
-                return res.status(400).send({
+                return res.status(404).send({
                     status: "error",
                     message: getReview.message
                 });
             } else if (getReview) {
-                return res.status(201).send({
+                return res.status(200).send({
                     status: "success",
                     data: {
                         new_Review: getReview

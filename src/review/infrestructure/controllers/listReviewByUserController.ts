@@ -13,12 +13,12 @@ export class ListReviewByUserController {
             let listReviews = await this.listReviewByUserUseCase.run(uuid as string)
 
             if (listReviews instanceof Error) {
-                return res.status(400).send({
+                return res.status(404).send({
                     status: "error",
                     message: listReviews.message
                 });
             } else if (listReviews) {
-                return res.status(201).send({
+                return res.status(200).send({
                     status: "success",
                     data: {
                         new_Review: listReviews

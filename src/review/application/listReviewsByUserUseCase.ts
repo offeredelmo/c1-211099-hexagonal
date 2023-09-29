@@ -10,7 +10,7 @@ export class ListReviewByUserUseCase {
     
     async run(
         uuid:string
-    ): Promise<Review[]  | string> {
+    ): Promise<Review[]  | string | Error> {
 
         let post = new ValidateId(uuid);
         const validation = await validate(post)
@@ -22,7 +22,7 @@ export class ListReviewByUserUseCase {
             const listAllActiveUser = await this.ireviewRepository.listReviewsByUser(uuid)
             return listAllActiveUser;
         } catch (error) {
-            return (error as Error).message;
+            return error as Error
         }
     }
 }

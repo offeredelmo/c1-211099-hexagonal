@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 
 import { UpdateReviewUseCase } from "../../application/updateReviewUseCase";
+import { Review } from "../../domain/review";
 
 
 export class UpdateReviewController {
@@ -18,19 +19,29 @@ export class UpdateReviewController {
            
            
             
-            let newReview = await this.updateReviewUseCase.run(uuid_review,uuid_user,review);
+            let updateReview = await this.updateReviewUseCase.run(uuid_review,uuid_user,review);
 
-            if (newReview) {
-                return res.status(201).send({
-                    status: "success",
+            if (updateReview instanceof Error) {
+                return res.status(404).send({
+                    status: "error",
+                    message: updateReview.message
+                });
+            } else if (updateReview === 'unauthorized') {
+               return res.status(401).send({
+                    status: "error",
                     data: {
-                        newReview: newReview
+                        message: "unauthorized este usuario no es dueño de a review"
                     }
+                });
+            } else if (updateReview instanceof Review ) {
+                return res.status(200).send({
+                    status: "success",
+                    message: updateReview
                 });
             } else {
                 return res.status(500).send({
                     status: "error",
-                    message: "An error occurred while adding the review."
+                    message: "An unexpected error occurred while delete the Review."
                 });
             }
 

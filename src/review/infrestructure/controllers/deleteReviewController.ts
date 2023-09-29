@@ -15,16 +15,21 @@ export class DeleteReviewController {
             let deleteReview = await this.deleteReviewUseCase.run(uuid_review as string, uuid_user as string)
 
             if (deleteReview instanceof Error) {
-                return res.status(400).send({
+                return res.status(404).send({
                     status: "error",
                     message: deleteReview.message
                 });
-            } else if (deleteReview) {
-                return res.status(201).send({
-                    status: "success",
+            } else if (deleteReview === 'unauthorized') {
+               return res.status(401).send({
+                    status: "error",
                     data: {
-                        new_Review: deleteReview
+                        message: "unauthorized este usuario no es dueño de a review"
                     }
+                });
+            } else if (typeof deleteReview  == 'string') {
+                return res.status(200).send({
+                    status: "success",
+                    message: deleteReview
                 });
             } else {
                 return res.status(500).send({
@@ -32,6 +37,7 @@ export class DeleteReviewController {
                     message: "An unexpected error occurred while delete the Review."
                 });
             }
+            
             
             
         } catch (error) {
