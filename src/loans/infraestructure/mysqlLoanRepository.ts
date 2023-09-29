@@ -2,14 +2,17 @@ import { defineAssociation } from "@sequelize/core/types/associations/helpers";
 import { query } from "../../database/connection";
 import { Loan } from "../domain/loan";
 import { ILoanRepository } from "../domain/loanRepository";
+import { validateUserExist, validatebook } from "./controller/validation/loanMysql";
 
 
 export class MysqlLoanRepository implements ILoanRepository {
 
 
-    async userLoanBook(uuid: string, uuid_book: string, uuid_user: string, loan_date: string, dedline: string, status: boolean): Promise<Loan | Error> {
+    async userLoanBook(uuid: string, uuid_book: string, uuid_user: string, loan_date: string, dedline: string, status: boolean): Promise<Loan | Error | string> {
 
         try {
+            await validateUserExist(uuid_user)
+            await validatebook(uuid_book)
             // 1. Verificar el status del usuario o del libro
             const checkLoanStatusSql = `
             SELECT 
@@ -54,11 +57,8 @@ export class MysqlLoanRepository implements ILoanRepository {
             return newLoan;
 
         } catch (error) {
-            console.error("Error al prestar libro:", error);
-            if (error instanceof Error) {
-                return error;
-            }
-            return new Error("An unexpected error occurred.");
+            console.error("Error adding review:", error);
+            return error as Error
         }
     }
 
@@ -99,9 +99,7 @@ export class MysqlLoanRepository implements ILoanRepository {
 
         } catch (error) {
             console.error("Error al devolver el libro:", error);
-            if (error instanceof Error) {
-                return error.message;
-            }
+            return error as Error
             return "Ocurrió un error inesperado al devolver el libro.";
         }
     }

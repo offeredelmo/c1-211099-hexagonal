@@ -18,12 +18,12 @@ export class ReturnLoanController {
 
             let newLoan = await this.returnLoanUseCase.run(uuid);
             if (newLoan instanceof Error) {
-                return res.status(400).send({
+                return res.status(404).send({
                     status: "error",
                     message: newLoan.message
                 });
             } else if (newLoan) {
-                return res.status(201).send({
+                return res.status(200).send({
                     status: "success",
                     data: {
                         new_Book: newLoan
