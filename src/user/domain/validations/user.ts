@@ -1,4 +1,4 @@
-import { IsString, IsUUID, Length, IsBoolean, IsNotEmpty, ValidateIf, IsIn, IsOptional} from 'class-validator';
+import { IsString, IsUUID, Length, IsBoolean, IsNotEmpty, ValidateIf, IsIn, IsOptional,IsEmail} from 'class-validator';
 
 
 export class ValidatorCreateUser {
@@ -22,8 +22,7 @@ export class ValidatorCreateUser {
     public phone_number: string;
 
     @IsNotEmpty()
-    @IsString()
-    @Length(1, 100)
+    @IsEmail()
     public email: string;
 
     @IsNotEmpty()
@@ -60,8 +59,25 @@ export class ValidatorCreateUser {
 
 
 }
+export class ValidateLogin {
+    @IsNotEmpty()
+    @IsEmail()
+    public email: string;
 
-export class ValidatorLoginUser {
+    @IsNotEmpty()
+    @IsString()
+    public password: string;
+
+    constructor(
+        email:string,
+        password:string,
+    ){
+        this.email = email,
+        this.password = password
+    }
+}
+
+export class ValidatorupdatePassword {
 
     @IsNotEmpty()
     @IsUUID()
@@ -83,19 +99,23 @@ export class ValidatorLoginUser {
 
 export class ValidatorFilter {
     @IsNotEmpty()
+    @IsString()
     @IsIn(['email', 'name', 'phone_number'])
     public filter: string;
 
     @ValidateIf(o => o.filter === 'email')
     @IsNotEmpty()
+    @IsEmail()
     public email?: string;
 
     @ValidateIf(o => o.filter === 'name')
     @IsNotEmpty()
+    @IsString()
     public name?: string;
 
     @ValidateIf(o => o.filter === 'phone_number')
     @IsNotEmpty()
+    
     public phone_number?: string;
 
     constructor(

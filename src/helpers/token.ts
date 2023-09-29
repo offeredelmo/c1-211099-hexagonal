@@ -20,7 +20,7 @@ export const tokenSigIn = (uuid:string, email:string ): string => {
         },
         process.env.KEY_TOKEN!,
         {
-            expiresIn: '3h'
+            expiresIn: '74h'
         }
     );
 }

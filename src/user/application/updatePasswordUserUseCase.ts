@@ -1,7 +1,7 @@
 import { validate } from "class-validator";
 import { User } from "../domain/user";
 import { IUsuarioRepository } from "../domain/userRepository";
-import { ValidatorLoginUser } from "../domain/validations/user";
+import { ValidatorupdatePassword } from "../domain/validations/user";
 
 
 export class UpdatePasswordUserUsecase {
@@ -11,7 +11,7 @@ export class UpdatePasswordUserUsecase {
         uuid: string,
         password: string
     ): Promise<User | null> {
-        let post = new ValidatorLoginUser(uuid, password)
+        let post = new ValidatorupdatePassword(uuid, password)
         const validation = await validate(post)
         if (validation.length > 0) {
             throw new Error(JSON.stringify(validation));

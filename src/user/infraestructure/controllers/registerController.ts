@@ -20,20 +20,14 @@ export class ResgisterUserController {
             } = req.body    
             console.log(req.body)
 
-            const miuuid: string = uuid()
-            const load_status = false
-            const status = false
-            const hashPassword = await encrypt(password)
+           
 
             let registerUser = await this.registerUserUseCase.run(
-                miuuid,
                 name,
                 last_name,
                 phone_number,
                 email,
-                hashPassword,
-                load_status,
-                status
+                password,
             )
 
             if (registerUser) {
