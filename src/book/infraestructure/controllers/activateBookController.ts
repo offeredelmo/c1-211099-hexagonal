@@ -12,17 +12,17 @@ export class ActivateBookController {
                 uuid,
             } = req.body
         
-            let activateUser = await this.ActivateBookUseCae.run(uuid)
+            let activateBook = await this.ActivateBookUseCae.run(uuid)
 
-            if(activateUser){
+            if(activateBook){
                 return res.status(200).send({
                     status:"succes",
                     data:{
-                        activateUser
+                        activateBook
                     }
                 })
             }
-            if (activateUser == null) {
+            if (activateBook == null) {
                 return res.status(404).send({
                     status: "error",
                     message: "Book not found."

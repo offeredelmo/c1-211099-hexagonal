@@ -7,17 +7,17 @@ export class ListIfReviewController {
     constructor(readonly listByFilterUseCase : ListIfReviewUseCase) {}
     async run(req:Request, res:Response) {
         try {
-            let listByFilter = await this.listByFilterUseCase.run()
+            let listIfReview = await this.listByFilterUseCase.run()
 
-            if(listByFilter){
+            if(listIfReview){
                 return res.status(200).send({
                     status:"succes",
                     data:{
-                        list: listByFilter
+                        list: listIfReview
                     }
                 })
             }else{
-                return res.status(200).send({
+                return res.status(404).send({
                     status: "ok",
                     message: "Books not found"
                 });

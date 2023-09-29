@@ -21,7 +21,7 @@ export class UpdateBookController {
             let updateBook = await this.updateBookUseCase.run(uuid,title,author,description);
 
             if (updateBook) {
-                return res.status(201).send({
+                return res.status(200).send({
                     status: "success",
                     data: {
                         new_Book: updateBook

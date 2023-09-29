@@ -170,7 +170,7 @@ export class MysqlBookRepository implements IBookRepositorio {
             await query(sql, [uuid]);
 
             // Si la eliminación fue exitosa, regresamos un mensaje de éxito
-            return `Book with UUID ${uuid} was successfully deleted.`;
+            return `Book successfully deleted.`;
 
         } catch (error) {
             console.error('Error al eliminar el libro:', error);
@@ -265,7 +265,9 @@ export class MysqlBookRepository implements IBookRepositorio {
             }
 
             const [rows]: any = await query(sql, [value]);
-            if (!rows || rows.length === 0) return null;
+            if (rows.length === 0) {
+                return null;
+            }        
             return rows.map((row: Book) => new Book(row.uuid, row.title, row.author, row.description, row.invoice, row.unique_code, row.img_url, row.loan_status));
 
         } catch (error) {
@@ -282,7 +284,7 @@ export class MysqlBookRepository implements IBookRepositorio {
             SELECT DISTINCT
             b.*
             FROM books b
-            JOIN reviews r ON b.uuid = r.book_uuid;
+            JOIN reviews r ON b.uuid = r.uuid_book;
         
                 `;
             const [rows]: any = await query(sql);

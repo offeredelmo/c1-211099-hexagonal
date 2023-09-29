@@ -25,7 +25,7 @@ export class ListByFilterController {
                     }
                 })
             }else{
-                return res.status(200).send({
+                return res.status(404).send({
                     status: "ok",
                     message: "Books not found"
                 });
