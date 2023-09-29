@@ -2,17 +2,15 @@
 import { validate } from "class-validator";
 import { Review } from "../domain/review";
 import { IreviewRepository } from "../domain/reviewRepository";
-import { ValidatorCreateReview } from "../domain/validation/review";
+import { ValidateUpdate } from "../domain/validation/review";
 
 
-export class AddReviewUseCase {
+export class UpdateReviewUseCase {
     constructor(readonly ireviewRepository: IreviewRepository) { }
    
     async run(
-        uuid: string,
-        uuid_user: string,
-        uuid_book: string,
-        data:string,
+        uuid_review: string,
+        uuid_user:string,
         review: string,
     ): Promise<Review | null | Error | string>  {
     console.log('usecase')
@@ -20,7 +18,7 @@ export class AddReviewUseCase {
         const status:boolean = true
         const currentDate: Date = new Date(); //obtiene la fecha  
         const date: string = currentDate.toISOString().split('T')[0];
-        let post = new ValidatorCreateReview(uuid,uuid_user,uuid_book,date,review,status);
+        let post = new ValidateUpdate(uuid_review,uuid_user,date,review);
         console.log('usecase')
 
         const validation = await validate(post)
@@ -32,7 +30,7 @@ export class AddReviewUseCase {
         try {
             console.log('usecase')
 
-            const newBook = await this.ireviewRepository.addReview(uuid, uuid_user, uuid_book, date, review, status)
+            const newBook = await this.ireviewRepository.updateReview(uuid_review,uuid_user,date,review)
             console.log(newBook)
             return newBook;
         } catch (error) {

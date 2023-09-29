@@ -1,25 +1,24 @@
 import { Request, Response } from "express";
-import { v4 as uuid } from "uuid";
-import { AddReviewUseCase } from "../../application/addReviewUseCase";
+
+import { UpdateReviewUseCase } from "../../application/updateReviewUseCase";
 
 
-export class AddReviewController {
+export class UpdateReviewController {
 
-    constructor(readonly addReviewUseCase: AddReviewUseCase) { }
+    constructor(readonly updateReviewUseCase: UpdateReviewUseCase) { }
 
     async run(req: Request , res: Response) {
         try {
 
             let {
+                uuid_review,
                 uuid_user,
-                uuid_book,
-                date,
-                review  
+                review
             } = req.body;
            
            
-            const miuuid: string = uuid();
-            let newReview = await this.addReviewUseCase.run(miuuid,uuid_user,uuid_book,date,review);
+            
+            let newReview = await this.updateReviewUseCase.run(uuid_review,uuid_user,review);
 
             if (newReview) {
                 return res.status(201).send({

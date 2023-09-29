@@ -19,4 +19,6 @@ export interface IreviewRepository {
    listReviewsInactive():Promise<Review[] | null>
 
    deleteReview(uuid_review:string,uuid_user:string):Promise<string | Error>
+
+   updateReview(uuid_review:string,uuid_user:string,date: string, review:string,):Promise<Review| Error | string >
 }

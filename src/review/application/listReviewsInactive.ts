@@ -8,7 +8,7 @@ export class ListReviewsInactiveUseCase {
     
     async run(): Promise<Review[] | null> {
         try {
-            const listReviewsInactive = await this.ireviewRepository.listAllReview()
+            const listReviewsInactive = await this.ireviewRepository.listReviewsInactive()
             return listReviewsInactive;
         } catch (error) {
             return null;

@@ -5,12 +5,16 @@ import { validateReviewConditions, validateReviewExist, validateUserExist } from
 
 export class MysqlReviewRepository implements IreviewRepository {
 
+ 
      
 
     async addReview(uuid: string, uuid_user: string, uuid_book: string, date: string, review: string, status: boolean): Promise<Review | null | Error | string> {
+        console.log('mysql')
+
         try {
 
             await validateReviewConditions(uuid_user, uuid_book);
+        console.log('mysql')
 
             //paso3: agregar reseña despues de haber pasado las condiciones 
             const sql = `
@@ -18,6 +22,7 @@ export class MysqlReviewRepository implements IreviewRepository {
                 VALUES (?, ?, ?, ?, ?, ?);
             `;
             const values = [uuid, uuid_book, uuid_user, date, review, status];
+        console.log('mysql')
 
             const centencia = await query(sql, values);
             if (centencia == null) {
@@ -26,6 +31,8 @@ export class MysqlReviewRepository implements IreviewRepository {
 
             // Devuelve la review recién añadida
             const newReview: Review = new Review(uuid, uuid_user, uuid_book, date, review, status);
+            console.log(newReview)
+
             return newReview;
 
         } catch (error) {
@@ -176,8 +183,57 @@ export class MysqlReviewRepository implements IreviewRepository {
             return "Review eliminada exitosamente.";
     
         } catch (error) {
-            console.error("Error al eliminar la review:", error);
-            throw new Error("Ocurrió un error al eliminar la review.");
+            console.error("Error adding review:", error);
+            return (error as Error).message;
+        }
+    }
+
+    async updateReview(uuid_review: string, uuid_user: string, date: string, review: string): Promise<Review | Error | string> {
+        try {
+            await validateReviewExist(uuid_review)
+            await validateUserExist(uuid_user)
+            // 1. Comprobar si la revisión pertenece al usuario
+            const checkOwnershipSql = `
+                SELECT COUNT(*) as count
+                FROM reviews
+                WHERE uuid = ? AND uuid_user = ?;
+            `;
+            const [ownershipResults]: any = await query(checkOwnershipSql, [uuid_review, uuid_user]);
+            if (ownershipResults[0].count === 0) {
+                throw new Error("El usuario no tiene permiso para modificar esta revisión.");
+            }
+    
+            // 2. Actualizar la revisión
+            const updateSql = `
+                UPDATE reviews 
+                SET date = ?, review = ? 
+                WHERE uuid = ?;
+            `;
+            await query(updateSql, [date, review, uuid_review]);
+    
+            // 3. Obtener la revisión actualizada para devolverla
+            const getUpdatedReviewSql = `
+                SELECT * 
+                FROM reviews
+                WHERE uuid = ?;
+            `;
+            const [updatedReviewResults]: any = await query(getUpdatedReviewSql, [uuid_review]);
+    
+            // Convertir el resultado en un objeto Review y devolverlo
+            const updatedReview: Review = new Review(
+                updatedReviewResults[0].uuid,
+                updatedReviewResults[0].uuid_user,
+                updatedReviewResults[0].uuid_book,
+                updatedReviewResults[0].date,
+                updatedReviewResults[0].review,
+                updatedReviewResults[0].status
+            );
+    
+            return updatedReview;
+    
+        } catch (error) {
+            console.error("Error adding review:", error);
+            return (error as Error).message;
         }
     }
     

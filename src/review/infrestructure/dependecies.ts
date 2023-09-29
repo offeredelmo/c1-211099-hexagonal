@@ -17,6 +17,8 @@ import { ListReviewsInactiveController } from "./controllers/listReviewsInactive
 
 import { DeleteReviewUseCase } from "../application/deleteReviewUseCase";
 import { DeleteReviewController } from "./controllers/deleteReviewController";
+import { UpdateReviewUseCase } from "../application/updateReviewUseCase";
+import { UpdateReviewController } from "./controllers/updateReviewController";
 
 
 
@@ -38,3 +40,6 @@ export const listReviewsInactiveController = new ListReviewsInactiveController(l
 
 export const deleteReviewUseCase = new DeleteReviewUseCase(mysqlReviewRepository)
 export const deleteReviewController = new DeleteReviewController(deleteReviewUseCase)
+
+export const updateReviewUseCase = new UpdateReviewUseCase(mysqlReviewRepository)
+export const updateReviewController = new UpdateReviewController(updateReviewUseCase)

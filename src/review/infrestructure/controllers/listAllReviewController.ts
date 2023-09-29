@@ -6,6 +6,7 @@ import { ListAllReviewsUseCase } from "../../application/listAllReviewsUseCase";
 export class ListAllReviewsController {
     constructor(readonly listAllReviewsUseCase : ListAllReviewsUseCase) {}
     async run(req:Request, res:Response) {
+        console.log('controller')
         try {
             let listAllReviews = await this.listAllReviewsUseCase.run()
 
