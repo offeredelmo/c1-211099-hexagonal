@@ -5,16 +5,20 @@ import { validateReviewConditions, validateReviewExist, validateUserExist } from
 
 export class MysqlReviewRepository implements IreviewRepository {
 
- 
-     
+
+
 
     async addReview(uuid: string, uuid_user: string, uuid_book: string, date: string, review: string, status: boolean): Promise<Review | null | Error | string> {
         console.log('mysql')
 
         try {
 
-            await validateReviewConditions(uuid_user, uuid_book);
-        console.log('mysql')
+            let validationResult = await validateReviewConditions(uuid_user, uuid_book);
+            console.log(typeof validationResult);
+            if (typeof validationResult === "string") {
+                console.log("activada la validacion");
+                return validationResult;
+            }
 
             //paso3: agregar reseña despues de haber pasado las condiciones 
             const sql = `
@@ -22,11 +26,11 @@ export class MysqlReviewRepository implements IreviewRepository {
                 VALUES (?, ?, ?, ?, ?, ?);
             `;
             const values = [uuid, uuid_book, uuid_user, date, review, status];
-        console.log('mysql')
 
-            const centencia = await query(sql, values);
+
+            const centencia = await query(sql, values);//esto si funciona
             if (centencia == null) {
-                throw new Error("ya realizaste una review para este libro .");
+                return ("ya realizaste una review para este libro .");
             }
 
             // Devuelve la review recién añadida
@@ -37,7 +41,7 @@ export class MysqlReviewRepository implements IreviewRepository {
 
         } catch (error) {
             console.error("Error adding review:", error);
-            return (error as Error).message;
+            return error as Error
         }
     }
 
@@ -45,12 +49,12 @@ export class MysqlReviewRepository implements IreviewRepository {
         try {
             // 1. Consulta SQL para obtener todas las reviews
             const sql = "SELECT * FROM reviews;";
-            const [rows]: any = await query(sql); 
-    
+            const [rows]: any = await query(sql);
+
             if (!Array.isArray(rows)) {
                 throw new Error('Rows is not an array');
             }
-    
+
             // 2. Convertir los resultados en una lista de objetos Review
             const reviews: Review[] = rows.map(row => new Review(
                 row.uuid,
@@ -60,9 +64,9 @@ export class MysqlReviewRepository implements IreviewRepository {
                 row.review,
                 row.status
             ));
-    
+
             return reviews;
-    
+
         } catch (error) {
             console.error("Error al obtener todas las reviews:", error);
             return null;
@@ -74,12 +78,12 @@ export class MysqlReviewRepository implements IreviewRepository {
             await validateUserExist(uuid)
             // 1. Consulta SQL para obtener todas las reviews de un usuario específico
             const sql = "SELECT * FROM reviews WHERE uuid_user = ?;";
-            const [rows]: any = await query(sql, [uuid]); 
-    
+            const [rows]: any = await query(sql, [uuid]);
+
             if (!Array.isArray(rows) || rows.length === 0) {
                 return []; // Puedes retornar un array vacío si no hay reviews para ese usuario.
             }
-    
+
             // 2. Convertir los resultados en una lista de objetos Review
             const reviews: Review[] = rows.map(row => new Review(
                 row.uuid,
@@ -89,15 +93,15 @@ export class MysqlReviewRepository implements IreviewRepository {
                 row.review,
                 row.status
             ));
-    
+
             return reviews;
-    
+
         } catch (error) {
             console.error("Error adding review:", error);
             return (error as Error).message;
         }
     }
-    
+
     async getReview(uuid: string): Promise<Review | null | string> {
         try {
             await validateReviewExist(uuid)
@@ -106,15 +110,15 @@ export class MysqlReviewRepository implements IreviewRepository {
             // 1. Consulta SQL para obtener la review con el UUID específico
             const sql = "SELECT * FROM reviews WHERE uuid = ?;";
             const [rows]: any = await query(sql, [uuid]);
-    
+
             // Verificar si obtuvimos un resultado
             if (!Array.isArray(rows) || rows.length === 0) {
                 return null; // Puedes retornar null si no se encuentra la review con ese UUID.
             }
-    
+
             // Tomar la primera fila como resultado (debido a que UUID es único, solo deberíamos tener un resultado)
             const row = rows[0];
-    
+
             // 2. Convertir el resultado en un objeto Review
             const review: Review = new Review(
                 row.uuid,
@@ -124,36 +128,36 @@ export class MysqlReviewRepository implements IreviewRepository {
                 row.review,
                 row.status
             );
-    
+
             return review;
-    
+
         } catch (error) {
             console.error("Error adding review:", error);
             return (error as Error).message;
         }
     }
-    
+
     async listReviewsInactive(): Promise<Review[] | null> {
         try {
             // Consulta SQL para obtener todas las reviews con status = FALSE
             const sql = "SELECT * FROM reviews WHERE status = 0;";
             const [rows]: any = await query(sql);
-            
+
             // Si no hay resultados o no es un array, se retorna null
             if (!Array.isArray(rows) || rows.length === 0) {
                 return null;
             }
-    
+
             // Convertir los resultados en una lista de objetos Review
             const reviews: Review[] = rows.map(row => new Review(row.uuid, row.uuid_user, row.uuid_book, row.date, row.review, row.status));
             return reviews;
-    
+
         } catch (error) {
             console.error("Error al obtener las reviews inactivas:", error);
             return null;
         }
     }
-    
+
     async deleteReview(uuid_review: string, uuid_user: string): Promise<string> {
         try {
             await validateReviewExist(uuid_review)
@@ -162,26 +166,26 @@ export class MysqlReviewRepository implements IreviewRepository {
             // Paso 1: Verificar que el usuario es el propietario de la review
             const validationSql = "SELECT uuid_user FROM reviews WHERE uuid = ?;";
             const [validationResults]: any = await query(validationSql, [uuid_review]);
-            
+
             if (validationResults.length === 0) {
                 throw new Error("No se encontró la review con el UUID proporcionado.");
             }
-    
+
             if (validationResults[0].uuid_user !== uuid_user) {
                 throw new Error("No tienes permiso para eliminar esta review.");
             }
-    
+
             // Paso 2: Eliminar la review
             const sql = "DELETE FROM reviews WHERE uuid = ?;";
             const result: any = await query(sql, [uuid_review]);
-    
+
             // Verificamos si se eliminó alguna fila
             if (result.affectedRows === 0) {
                 throw new Error("No se encontró la review con el UUID proporcionado.");
             }
-    
+
             return "Review eliminada exitosamente.";
-    
+
         } catch (error) {
             console.error("Error adding review:", error);
             return (error as Error).message;
@@ -202,7 +206,7 @@ export class MysqlReviewRepository implements IreviewRepository {
             if (ownershipResults[0].count === 0) {
                 throw new Error("El usuario no tiene permiso para modificar esta revisión.");
             }
-    
+
             // 2. Actualizar la revisión
             const updateSql = `
                 UPDATE reviews 
@@ -210,7 +214,7 @@ export class MysqlReviewRepository implements IreviewRepository {
                 WHERE uuid = ?;
             `;
             await query(updateSql, [date, review, uuid_review]);
-    
+
             // 3. Obtener la revisión actualizada para devolverla
             const getUpdatedReviewSql = `
                 SELECT * 
@@ -218,7 +222,7 @@ export class MysqlReviewRepository implements IreviewRepository {
                 WHERE uuid = ?;
             `;
             const [updatedReviewResults]: any = await query(getUpdatedReviewSql, [uuid_review]);
-    
+
             // Convertir el resultado en un objeto Review y devolverlo
             const updatedReview: Review = new Review(
                 updatedReviewResults[0].uuid,
@@ -228,16 +232,16 @@ export class MysqlReviewRepository implements IreviewRepository {
                 updatedReviewResults[0].review,
                 updatedReviewResults[0].status
             );
-    
+
             return updatedReview;
-    
+
         } catch (error) {
             console.error("Error adding review:", error);
             return (error as Error).message;
         }
     }
-    
-    
-    
+
+
+
 
 }

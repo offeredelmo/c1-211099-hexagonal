@@ -20,20 +20,31 @@ export class AddReviewController {
            
             const miuuid: string = uuid();
             let newReview = await this.addReviewUseCase.run(miuuid,uuid_user,uuid_book,date,review);
-
-            if (newReview) {
+         
+            if (newReview instanceof Error) {
+                return res.status(404).send({
+                    status: "error",
+                    message: newReview.message
+                });
+            } else if (typeof newReview === 'string') {
+                return res.status(409).send({
+                    status: "error",
+                    message: newReview
+                });
+            } else if (newReview) {
                 return res.status(201).send({
                     status: "success",
                     data: {
-                        newReview: newReview
+                        new_Book: newReview
                     }
                 });
             } else {
                 return res.status(500).send({
                     status: "error",
-                    message: "An error occurred while adding the review."
+                    message: "An unexpected error occurred while adding loan book."
                 });
             }
+            
 
         } catch (error) {
             if (error instanceof Error) {
