@@ -19,17 +19,17 @@ userRoutes.get('/filter',validateToken,getUserByFilterController.run.bind(getUse
 
 userRoutes.get('/id',validateToken,getUserByIdController.run.bind(getUserByIdController))
 
-userRoutes.post('/id',validateToken,updateUserByIdController.run.bind(updateUserByIdController))
+userRoutes.put('/id',validateToken,updateUserByIdController.run.bind(updateUserByIdController))
 
-userRoutes.post('/restar_password',validateToken,updatePasswordController.run.bind(updatePasswordController))
+userRoutes.put('/restar_password',validateToken,updatePasswordController.run.bind(updatePasswordController))
 
 userRoutes.delete('/',validateToken,deleteUserController.run.bind(deleteUserController))
 
-userRoutes.post('/activate',validateToken,activateUserController.run.bind(activateUserController))
+userRoutes.put('/activate',validateToken,activateUserController.run.bind(activateUserController))
 
 userRoutes.post('/login',loginUserController.run.bind(loginUserController))
 
-userRoutes.post('/inactivate',validateToken,inactivationUserController.run.bind(inactivationUserController))
+userRoutes.put('/inactivate',validateToken,inactivationUserController.run.bind(inactivationUserController))
 
 
 

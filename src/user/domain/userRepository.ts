@@ -1,7 +1,7 @@
 import { User } from "./user";
 
 export interface IUsuarioRepository {
-    registerUser( //ya se valida class
+    registerUser( //ya se valida class //listo
         uuid: string,
         name: string,
         last_name: string,
@@ -12,22 +12,22 @@ export interface IUsuarioRepository {
         status: boolean
     ): Promise<User | null | string | Error> ;
 
-    loginUser(email:string, password:string):Promise<string | null> 
+    loginUser(email:string, password:string):Promise<string | null>  //listo
 
-    listAllUsers(): Promise<User[] | null> 
+    listAllUsers(): Promise<User[] | null> //listo
 
-    listAllUserIactive(): Promise<User[] | User | null> 
+    listAllUserIactive(): Promise<User[] | User | null> //listo
 
-    getUserByFilter( 
+    getUserByFilter( //listo
         filter: string,
         email?: string,
         name?: string,
         phone_number?: string
     ): Promise<User | User[] | null>
 
-    getUserById(uuid: string): Promise<User | null> 
+    getUserById(uuid: string): Promise<User | null>  //listo
 
-    updateUserById(
+    updateUserById( //listo 
         uuid: string,
         name?: string,
         last_name?: string,
@@ -35,11 +35,11 @@ export interface IUsuarioRepository {
         email?: string,
     ): Promise<User | null>
 
-    updatePassword(uuid: string, password: string): Promise<User | null> 
+    updatePassword(uuid: string, password: string): Promise<User | null>  //listo
 
-    deleteUserById(uuid: String): Promise<string | null> 
+    deleteUserById(uuid: String): Promise<string | null> //listo
 
-    activateUser(uuid: string): Promise<string | null> 
+    activateUser(uuid: string): Promise<string | null> //listo
 
     inactivateUser(uuid: string):Promise<string | null>
 

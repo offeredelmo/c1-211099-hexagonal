@@ -7,8 +7,8 @@ export class ListAllUserUseCase {
     
     async run(): Promise<User[] | null> {
         try {
-            const listAllActiveUser = await this.usuarioRepository.listAllUsers()
-            return listAllActiveUser;
+            const listAllUser = await this.usuarioRepository.listAllUsers()
+            return listAllUser;
         } catch (error) {
             return null;
         }

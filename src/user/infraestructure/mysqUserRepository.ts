@@ -88,7 +88,10 @@ export class MysqlUserRepository implements IUsuarioRepository {
             }
 
             const [rows]: any = await query(sql, [value]);
-            if (!rows || rows.affectedRows === 0) return null;
+            console.log(rows)
+            if (rows.length === 0) {
+                return null;
+            }            
             return rows.map((row: User) => new User(row.uuid, row.name, row.last_name, row.phone_number, row.email, row.password, row.loan_status, row.status));
 
         } catch (error) {
@@ -200,8 +203,9 @@ export class MysqlUserRepository implements IUsuarioRepository {
         try {
             const sql = 'DELETE FROM users WHERE uuid = ?';
             const result: any = await query(sql, [uuid]);
-
-            if (!result || result.affectedRows === 0) return 'No user found with the provided UUID.';
+            if (result[0].affectedRows === 0){
+                return null;
+            } 
 
             return 'User deleted successfully.';
         } catch (error) {

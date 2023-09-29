@@ -18,14 +18,14 @@ export class DeleteUserController {
                 return res.status(200).send({
                     status:"succes",
                     data:{
-                        eliminate: UpdateUserById
+                        message: UpdateUserById
                     }
                 })
             }
             else{
                 return res.status(404).send({
                     status: "error",
-                    message: "User not found or not delete."
+                    message: "User not found."
                 });
             }
         } catch (error) {  

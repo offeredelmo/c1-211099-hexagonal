@@ -12,14 +12,13 @@ export class GetUserByFilterUseCase {
         
         let post = new ValidatorFilter(filter,email,name,phone_number)
         const validation = await validate(post)
-        console.log(validation.length)
         if (validation.length > 0) {
             throw new Error(JSON.stringify(validation));
         }
 
         try {    
-            const listuserByEmail = await this.usuarioRepository.getUserByFilter(filter,email, name, phone_number);
-            return listuserByEmail;
+            const getByFilter = await this.usuarioRepository.getUserByFilter(filter,email, name, phone_number);
+            return getByFilter;
         } catch (error) {
             return null;
         }

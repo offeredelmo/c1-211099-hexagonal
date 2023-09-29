@@ -28,7 +28,7 @@ export class UpdateUserByIdController {
             }else{
                 return res.status(404).send({
                     status: "error",
-                    message: "User not found or not updated."
+                    message: "User not found "
                 });
             }
 
@@ -44,7 +44,7 @@ export class UpdateUserByIdController {
             } 
             return res.status(500).send({
                 status: "error",
-                message: "An error occurred while update user the user."
+                message: "An error occurred while update the user."
             });   
         }
     }

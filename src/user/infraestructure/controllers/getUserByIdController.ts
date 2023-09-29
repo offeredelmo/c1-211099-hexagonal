@@ -8,9 +8,9 @@ export class GetUserByIdController {
     async run(req:Request, res:Response) {
         try {
 
-            let {uuid} =  req.body
+            let {uuid} =  req.query
         
-            let getUserByuuid = await this.getUserByIdUseCase.run(uuid)
+            let getUserByuuid = await this.getUserByIdUseCase.run(uuid as string)
 
             if(getUserByuuid){
                 return res.status(200).send({

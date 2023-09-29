@@ -26,7 +26,7 @@ export class UpdatePasswordController {
             } else {
                 return res.status(404).send({
                     status: "error",
-                    message: "User not found or not updated."
+                    message: "User not found"
                 });
             }
         } catch (error) {

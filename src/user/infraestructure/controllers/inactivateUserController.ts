@@ -24,7 +24,7 @@ export class InactivationUserController {
             if (!inactivateUser) {
                 return res.status(404).send({
                     status: "error",
-                    message: "No user found with the provided UUID."
+                    message: "user not found"
                 });
             }
         } catch (error) {   
