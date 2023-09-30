@@ -2,21 +2,20 @@ import express from "express";
 import cors from "cors";
 import "dotenv/config";
 import { Signale } from 'signale';
-// import { bookRoutes } from "./book/infraestructure/bookRouter";
+import { bookRoutes } from "./book/infraestructure/bookRouter";
 import { userRoutes } from "./user/infraestructure/userRouter";
 
 import * as admin from "firebase-admin";
 import { Bucket } from "@google-cloud/storage";
-// import * as serviceAccount from "./book/soa-exagonal-firebase-adminsdk-fvxaz-ebe0d5c38c.json";
+import * as serviceAccount from "./book/soa-exagonal-firebase-adminsdk-fvxaz-ebe0d5c38c.json";
 import fileUpload from 'express-fileupload';
-// import { loanRoutes } from "./loans/infraestructure/loanRoutes";
 
 // Ruta al archivo de credenciales
 
-// admin.initializeApp({
-//   credential: admin.credential.cert(serviceAccount as admin.ServiceAccount),
-//   storageBucket: "soa-exagonal.appspot.com/"
-// });
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount as admin.ServiceAccount),
+  storageBucket: "soa-exagonal.appspot.com/"
+});
 
 const app = express();
 const signale = new Signale();
