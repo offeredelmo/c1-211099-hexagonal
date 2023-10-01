@@ -7,9 +7,7 @@ export class ActivateUserController {
     constructor(readonly activateUserUseCase : ActivateUserUseCase) {}
     async run(req:Request, res:Response) {
         try {
-            let {
-                uuid,
-            } = req.body
+            let { uuid } = req.params;
         
             let activateUser = await this.activateUserUseCase.run(uuid)
 
@@ -17,7 +15,7 @@ export class ActivateUserController {
                 return res.status(200).send({
                     status:"succes",
                     data:{
-                        activateUser
+                        message: activateUser
                     }
                 })
             }

@@ -7,9 +7,7 @@ export class InactivationUserController {
     constructor(readonly inactivateUserUseCase : InactivateUserUseCase) {}
     async run(req:Request, res:Response) {
         try {
-            let {
-                uuid,
-            } = req.body
+            let { uuid } = req.params;
         
             let inactivateUser = await this.inactivateUserUseCase.run(uuid)
 

@@ -8,9 +8,7 @@ export class DeleteUserController {
     async run(req:Request, res:Response) {
         try {
 
-            let {
-                uuid,
-            } = req.body
+            let { uuid } = req.params;
         
             let UpdateUserById = await this.deleteUserUseCase.run(uuid)
 

@@ -8,8 +8,8 @@ export class GetUserByIdController {
     async run(req:Request, res:Response) {
         try {
 
-            let {uuid} =  req.query
-        
+            let { uuid } = req.params;
+            console.log(uuid)
             let getUserByuuid = await this.getUserByIdUseCase.run(uuid as string)
 
             if(getUserByuuid){

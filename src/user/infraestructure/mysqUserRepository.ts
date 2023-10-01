@@ -41,7 +41,7 @@ export class MysqlUserRepository implements IUsuarioRepository {
         }
     }
 
-    async listAllUserIactive(): Promise<User[] | null> {
+    async listAllUserInactive(): Promise<User[] | null> {
         try {
             const sql = "SELECT * FROM users WHERE status = false"; // SQL modificado para filtrar por status
             const [rows]: any = await query(sql); // Esto probablemente devuelve un tipo de dato más complejo

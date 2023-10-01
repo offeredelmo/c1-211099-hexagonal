@@ -6,8 +6,8 @@ import { MysqlUserRepository } from "./mysqUserRepository";
 import { ListAllUserUseCase } from "../application/listAllUserUseCase";
 import { ListAllUserController } from "./controllers/listAllUsersController";
 
-import { ListAllUserActiveUseCase } from "../application/listAllUserInactiveUseCase";
-import { ListAllUsersActiveController } from "./controllers/listAllUsersActiveController";
+import { ListAllUserInactiveUseCase } from "../application/listAllUserInactiveUseCase";
+import { ListAllUsersInactiveController } from "./controllers/listAllUsersInactiveController";
 
 import { GetUserByFilterUseCase } from "../application/getUserByFilterUseCase";
 import { GetUserByFilterController } from "./controllers/getUserByFilterController";
@@ -42,8 +42,8 @@ export const resgisterUserController = new ResgisterUserController(registerUserU
 export const listAllUseCase = new ListAllUserUseCase(mysqlUserRepository)
 export const listAllUserController = new ListAllUserController(listAllUseCase)
 
-export const listAllUserActiveUseCase = new ListAllUserActiveUseCase(mysqlUserRepository)
-export const listAllUserActiveController = new ListAllUsersActiveController(listAllUserActiveUseCase)
+export const listAllUserInactiveUseCase = new ListAllUserInactiveUseCase(mysqlUserRepository)
+export const listAllUsersInactiveController = new ListAllUsersInactiveController(listAllUserInactiveUseCase)
 
 
 export const getUserByFilterUseCase= new GetUserByFilterUseCase(mysqlUserRepository)

@@ -2,8 +2,12 @@ import express from "express";
 import cors from "cors";
 import "dotenv/config";
 import { Signale } from 'signale';
+
 import { bookRoutes } from "./book/infraestructure/bookRouter";
 import { userRoutes } from "./user/infraestructure/userRouter";
+import { reviewRouter } from "./review/infrestructure/reviewRoutes";
+import { loanRoutes } from "./loans/infraestructure/loanRoutes";
+
 
 import * as admin from "firebase-admin";
 import { Bucket } from "@google-cloud/storage";
@@ -20,22 +24,18 @@ admin.initializeApp({
 const app = express();
 const signale = new Signale();
 
-
 app.use(fileUpload());
-
 app.use(cors());
-
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+app.use('/api/v1/user', userRoutes);
 
+app.use('/api/v1/book',bookRoutes)
 
+app.use('/api/v1/review',reviewRouter)
 
-app.use('/user', userRoutes);
-
-// app.use('/book',bookRoutes)
-
-// app.use('/loan',loanRoutes)
+app.use('/api/v1/loan',loanRoutes)
 
 const port = process.env.PORT || 3001;
 app.listen(port, () => {

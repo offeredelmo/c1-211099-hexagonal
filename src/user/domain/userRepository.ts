@@ -16,7 +16,7 @@ export interface IUsuarioRepository {
 
     listAllUsers(): Promise<User[] | null> //listo
 
-    listAllUserIactive(): Promise<User[] | User | null> //listo
+    listAllUserInactive(): Promise<User[] | User | null> //listo
 
     getUserByFilter( //listo
         filter: string,
