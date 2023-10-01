@@ -18,7 +18,7 @@ export class ListAllLoansController {
                     message: newLoan.message
                 });
             } else if (newLoan) {
-                return res.status(201).send({
+                return res.status(200).send({
                     status: "success",
                     data: {
                         Loans: newLoan
