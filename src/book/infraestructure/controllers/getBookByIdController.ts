@@ -7,10 +7,10 @@ export class GetBookByIdController {
     constructor(readonly getBookByIdUseCase: GetBookByIdUseCase) { }
 
     async run(req: Request , res: Response) {
-        console.log(req.body+"aaaa")
+        
         try {
-            let uuid = req.query.uuid as string ;
-          
+            let { uuid } = req.params; 
+            console.log(uuid)
             let getBook = await this.getBookByIdUseCase.run(uuid);
     
             if (getBook) {

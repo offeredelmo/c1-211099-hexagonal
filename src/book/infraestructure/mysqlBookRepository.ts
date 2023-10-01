@@ -276,8 +276,6 @@ export class MysqlBookRepository implements IBookRepositorio {
         }
     }
 
-
-
     async listIfReview(): Promise<Book[] | null> {
         try {
             const sql = `
@@ -313,10 +311,6 @@ export class MysqlBookRepository implements IBookRepositorio {
             return null;
         }
     }
-
-
-
-
 
 }
 

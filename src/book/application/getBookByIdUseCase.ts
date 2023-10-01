@@ -10,6 +10,7 @@ export class GetBookByIdUseCase {
     async run(
         uuid: string,
     ): Promise<Book | null> {
+      
         let post = new ValidatorId(uuid)
         const validation = await validate(post)
         if (validation.length > 0) {

@@ -14,8 +14,10 @@ export class ListByFilterUseCase {
         invoice?:string,
         unique_code?:string
     ): Promise<Book[] | null> {
+       
         let post = new ValidatorFilter(filter,title,author,invoice,unique_code)
         const validation = await validate(post)
+        
         if (validation.length > 0) {
             throw new Error(JSON.stringify(validation));
         }

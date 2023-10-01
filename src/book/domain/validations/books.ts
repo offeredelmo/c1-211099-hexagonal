@@ -135,7 +135,9 @@ export class ValidatorId {
     @IsNotEmpty()
     @IsUUID()
     uuid: string;
+    
     constructor(uuid: string) {
         this.uuid = uuid;
+       
     }
 }

@@ -17,8 +17,6 @@ userRoutes.get('/inactive',validateToken,listAllUsersInactiveController.run.bind
 
 userRoutes.get('/filter',validateToken,getUserByFilterController.run.bind(getUserByFilterController))
 
-userRoutes.get('/:uuid',validateToken,getUserByIdController.run.bind(getUserByIdController))
-
 userRoutes.put('/id',validateToken,updateUserByIdController.run.bind(updateUserByIdController))
 
 userRoutes.put('/reset_password',validateToken,updatePasswordController.run.bind(updatePasswordController))
@@ -30,6 +28,9 @@ userRoutes.put('/:uuid/activate',validateToken,activateUserController.run.bind(a
 userRoutes.post('/login',loginUserController.run.bind(loginUserController))
 
 userRoutes.put('/:uuid/inactivate',validateToken,inactivationUserController.run.bind(inactivationUserController))
+
+userRoutes.get('/:uuid',validateToken,getUserByIdController.run.bind(getUserByIdController))
+
 
 
 
